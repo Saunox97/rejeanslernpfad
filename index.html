@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>ReJeans – Lernpfad Rechtsformen</title>
+<style>
+:root{--bg:#0f1020;--ink:#1d1d2b;--muted:#6b6b80;--accent:#ff6b4a;--accent2:#3dd6c6;--ok:#2a9d63;--bad:#d64545;--gold:#f5b942}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+button{font:inherit;cursor:pointer;-webkit-appearance:none;appearance:none}
+.screen{display:none;min-height:100vh}
+.screen.active{display:block}
+/* START */
+#start{background:radial-gradient(circle at 30% 20%,#2a2f6a 0,#0f1020 60%);display:none;align-items:center;justify-content:center;padding:24px}
+#start.active{display:flex}
+.startcard{max-width:620px;width:100%;text-align:center}
+.logo{font-size:clamp(48px,10vw,96px);font-weight:900;letter-spacing:-.02em;display:inline-block;padding:6px 26px;border:3px dashed var(--accent);border-radius:18px;color:#fff}
+.logo span{color:var(--accent)}
+.tagline{font-size:clamp(17px,2.4vw,22px);color:#cfd0ea;margin:18px 0 6px}
+.small{font-size:14px;color:#9a9cb8}
+.namebox{margin:28px auto 0;max-width:420px;text-align:left}
+.namebox label{font-size:14px;color:#cfd0ea}
+.namebox input{width:100%;font-size:20px;padding:14px 16px;border-radius:12px;border:2px solid #3a3d6b;background:#14152a;color:#fff;margin-top:6px}
+.bigbtn{display:inline-block;margin-top:18px;background:var(--accent);color:#fff;border:0;border-radius:14px;padding:16px 30px;font-size:19px;font-weight:800;box-shadow:0 8px 24px #ff6b4a55}
+.bigbtn:disabled{opacity:.4;box-shadow:none}
+/* MENU */
+#menu{padding:24px clamp(16px,4vw,48px) 48px;background:#101125}
+.menuhead{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.menuhead h1{margin:0;font-size:clamp(24px,3.4vw,34px)}
+.menuhead p{margin:4px 0 0;color:#a9abc9}
+.eps{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.ep{position:relative;text-align:left;background:#1c1e3a;border:2px solid #2c2f55;border-radius:16px;padding:16px;color:#fff;min-height:150px}
+.ep .eico{font-size:34px}
+.ep .enr{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:800;margin-top:6px}
+.ep .etitle{font-size:19px;font-weight:800;margin:4px 0}
+.ep .eform{font-size:14px;color:#b9bbd8}
+.ep .estate{position:absolute;top:14px;right:14px;font-size:13px;font-weight:700;border-radius:99px;padding:4px 10px;background:#2c2f55}
+.ep.done{border-color:var(--ok)} .ep.done .estate{background:var(--ok)}
+.ep.open{border-color:var(--accent);box-shadow:0 0 0 4px #ff6b4a33} .ep.open .estate{background:var(--accent)}
+.ep.locked{opacity:.45;cursor:not-allowed}
+.ep .ebar{height:6px;background:#2c2f55;border-radius:99px;margin-top:12px;overflow:hidden}.ep .ebar i{display:block;height:100%;background:var(--accent2)}
+.reset{margin-top:36px;background:none;border:1px solid #3a3d6b;color:#8e90b0;border-radius:10px;padding:8px 14px;font-size:13px}
+/* CUTSCENE */
+#cut{background:#000}
+.film{position:fixed;inset:0;background:#000;overflow:hidden;-webkit-user-select:none;user-select:none}
+.bg{position:absolute;inset:0}
+.bg svg{width:100%;height:100%;display:block}
+.bg.kb{animation:kb 10s ease-out forwards}
+@keyframes kb{from{transform:scale(1.04)}to{transform:scale(1.17)}}
+.vig{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 35%,rgba(0,0,0,.75) 100%),rgba(5,5,20,.28);pointer-events:none}
+.bar{position:absolute;left:0;right:0;height:8vh;background:#000;z-index:3}
+.bar.top{top:0}.bar.bot{bottom:0}
+.cap{position:absolute;top:calc(8vh + 18px);left:4vw;z-index:4;font-size:clamp(13px,1.7vw,19px);letter-spacing:.16em;text-transform:uppercase;color:#f7e6bf;opacity:0;transition:opacity 1s;font-weight:700;text-shadow:0 2px 8px #000;max-width:62vw}
+.cap.on{opacity:1}
+.sub{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(8vh + 18px);width:min(920px,92vw);z-index:4;display:flex;gap:16px;align-items:flex-start;background:rgba(8,8,20,.78);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:16px 20px;min-height:100px;transition:opacity .3s}
+.ava{flex:0 0 auto;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:22px;color:#fff;border:3px solid rgba(255,255,255,.85)}
+.whobox{display:flex;flex-direction:column;gap:4px;min-width:0}
+.whoname{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.txt{font-size:clamp(17px,2.2vw,25px);line-height:1.45}
+.txt.narr{font-style:italic;color:#ece5d2}
+.cctl{position:absolute;top:calc(8vh + 12px);right:3vw;z-index:6;display:flex;gap:8px}
+.cctl button{background:rgba(0,0,0,.55);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:9px 15px;font-size:14px}
+.dots{position:absolute;bottom:2.8vh;left:50%;transform:translateX(-50%);z-index:5;display:flex;gap:6px}
+.dots i{width:8px;height:8px;border-radius:50%;background:#444}.dots i.on{background:var(--accent)}.dots i.past{background:#999}
+.tapnext{position:absolute;bottom:2.4vh;right:3vw;z-index:5;font-size:13px;color:#aaa}
+.fx{position:absolute;top:24%;right:12%;font-size:min(15vw,140px);z-index:4;opacity:0;pointer-events:none}
+.fx.pop{animation:pop 2.8s ease forwards}
+@keyframes pop{0%{opacity:0;transform:scale(.3) rotate(-14deg)}14%{opacity:1;transform:scale(1.15) rotate(6deg)}24%{transform:scale(1) rotate(0)}30%{transform:translateX(-6px)}36%{transform:translateX(6px)}42%{transform:translateX(0)}80%{opacity:1}100%{opacity:0}}
+.titlecard{position:absolute;inset:0;z-index:8;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
+.tc-ep{font-size:14px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:800}
+.tc-title{font-size:clamp(34px,6vw,64px);font-weight:900;margin:12px 0 6px;animation:fadeup 1.2s ease}
+.tc-sub{font-size:clamp(16px,2.2vw,22px);color:#bbb}
+@keyframes fadeup{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.playbtn{margin-top:30px;background:#fff;color:#000;border:0;border-radius:999px;padding:16px 34px;font-size:19px;font-weight:800}
+.tc-note{margin-top:14px;font-size:13px;color:#888}
+/* ROOM */
+#room{background:#14152a;padding-bottom:40px}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px;padding:10px 14px;background:#0b0c1a;border-bottom:1px solid #2a2c48}
+@media (max-width:760px){.topbar{flex-wrap:wrap}.tbmid{order:-1;flex-basis:100%}}
+.tb{background:#24263f;color:#fff;border:0;border-radius:10px;padding:9px 13px;font-size:15px;font-weight:600;white-space:nowrap}
+.tbmid{flex:1;text-align:center;min-width:0}
+.tbmid .t1{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:800}
+.tbmid .t2{font-size:17px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mainquest{margin:14px 16px 0;padding:14px 18px;border-radius:16px;background:#2a1f2e;border:2px solid var(--gold);display:flex;gap:14px;align-items:center}
+.mq-ico{font-size:34px}
+.mq-label{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:900}
+.mq-text{font-size:clamp(17px,2.1vw,23px);font-weight:800;margin-top:3px;line-height:1.3}
+.layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(330px,1fr);gap:16px;padding:16px;align-items:start}
+@media (max-width:920px){.layout{grid-template-columns:1fr}.roomcol{position:static!important}}
+.roomcol{position:sticky;top:76px}
+.stage{position:relative;aspect-ratio:5/3;border-radius:18px;overflow:hidden;box-shadow:0 12px 34px #0009;background:#222}
+.stage>svg{position:absolute;inset:0;width:100%;height:100%}
+.obj{position:absolute;transform:translate(-50%,-50%);background:none;border:0;padding:0;display:flex;flex-direction:column;align-items:center;gap:5px;color:#fff;z-index:2}
+.obj .ico{width:clamp(46px,5.6vw,64px);height:clamp(46px,5.6vw,64px);border-radius:50%;display:grid;place-items:center;font-size:clamp(24px,3vw,34px);background:rgba(255,255,255,.94);animation:pulse 1.8s infinite}
+.obj.read .ico{animation:none;box-shadow:0 0 0 3px var(--accent2),0 6px 14px #0007}
+.obj .ico .chk{position:absolute;top:-4px;right:-4px;background:var(--accent2);color:#04342c;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;place-items:center;font-weight:900}
+.obj.read .ico .chk{display:grid}
+.obj .ico{position:relative}
+.obj .lbl{font-size:12px;background:rgba(0,0,0,.78);padding:3px 8px;border-radius:8px;white-space:nowrap;font-weight:700;max-width:160px;overflow:hidden;text-overflow:ellipsis}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(255,107,74,.95),0 0 0 4px rgba(255,107,74,.5)}50%{box-shadow:0 0 0 4px rgba(255,107,74,.95),0 0 0 16px rgba(255,107,74,0)}}
+.roomhint{font-size:14px;color:#a3a5c4;margin-top:10px;line-height:1.4}
+.qpanel{background:#1d1f3a;border-radius:18px;padding:14px}
+.qph{display:flex;justify-content:space-between;align-items:center;font-weight:800}
+.qph .qcount{font-size:14px;color:#c9cbe8}
+.pbar{height:8px;background:#2e3156;border-radius:99px;overflow:hidden;margin:8px 0 12px}.pbar i{display:block;height:100%;background:var(--accent);transition:width .5s}
+.qcard{background:#fff;color:var(--ink);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.qhead{display:flex;align-items:center;gap:8px;padding:12px 14px;cursor:pointer;flex-wrap:wrap}
+.qnum{font-size:12px;color:var(--muted);font-weight:800}
+.op{font-size:12px;font-weight:900;background:var(--ink);color:#fff;border-radius:6px;padding:3px 8px;text-transform:uppercase;letter-spacing:.05em}
+.qt{flex:1;font-weight:800;min-width:120px}
+.qst{font-size:18px}
+.qcard.done .qhead{background:#e6f5ec}
+.qcard.locked .qhead{background:#f1f1f5;color:#777}
+.qbody{padding:6px 14px 16px;border-top:1px solid #ececf2}
+.qtext{font-size:16px;line-height:1.5;margin:8px 0 10px}
+.lockmsg{background:#f4f4f8;border-radius:10px;padding:10px 12px;font-size:15px;color:#555}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;background:#f4f4f9;border:2px solid #e1e1ec;border-radius:10px;padding:11px 12px;font-size:15px;color:var(--ink);line-height:1.35}
+.opt.ok{border-color:var(--ok);background:#e6f5ec}.opt.bad{border-color:var(--bad);background:#fdeaea}
+.btn{background:var(--accent);color:#fff;border:0;border-radius:10px;padding:11px 18px;font-weight:800;font-size:15px;margin-top:12px}
+.fb{margin-top:10px;font-size:15px;font-weight:700;line-height:1.4}.fb.ok{color:var(--ok)}.fb.bad{color:var(--bad)}
+.hintbtn{background:#fff5d6;border:1px solid #f0cd70;color:#6e5100;border-radius:9px;padding:7px 11px;font-size:14px;margin-top:12px;font-weight:700}
+.hint{background:#fff9e6;border-left:4px solid var(--gold);padding:8px 11px;margin-top:8px;font-size:14px;border-radius:0 8px 8px 0;line-height:1.4}
+.num{display:block;margin:10px 0}.num>span{display:block;font-size:15px;margin-bottom:5px;line-height:1.4}
+.inp{display:flex;align-items:center;gap:8px}.inp input{font-size:18px;padding:9px 11px;border:2px solid #d8d8e6;border-radius:9px;width:170px;color:var(--ink)}
+.inp input.ok{border-color:var(--ok);background:#f1faf5}.inp input.bad{border-color:var(--bad);background:#fdf1f1}
+.inp em{font-style:normal;font-weight:700;color:#555}
+.tf{border:1px solid #e3e3ee;border-radius:10px;padding:10px 12px;margin:8px 0}.tf.ok{border-color:var(--ok);background:#f1faf5}.tf.bad{border-color:var(--bad);background:#fdf1f1}
+.tfs{font-size:15px;line-height:1.4}
+.tfb{display:flex;gap:8px;margin-top:8px}.tfb button{flex:1;padding:9px;border-radius:9px;border:2px solid #d8d8e6;background:#fff;font-weight:800;color:var(--ink)}
+.tfb button.on{border-color:var(--ink);background:var(--ink);color:#fff}
+.fix{font-size:14px;color:#3d4a40;margin-top:6px}
+.sorthelp{font-size:14px;color:#666;margin:4px 0}
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:48px;padding:8px;border:2px dashed #d4d4e2;border-radius:10px;margin:8px 0}
+.pool.target{border-color:var(--accent)}
+.chip{background:#fff;border:2px solid #cdcee0;border-radius:12px;padding:8px 11px;font-size:14px;color:var(--ink);text-align:left;line-height:1.3}
+.chip.sel{border-color:var(--accent);background:#fff0ec;box-shadow:0 0 0 3px #ff6b4a44}
+.chip.ok{border-color:var(--ok);background:#f1faf5}.chip.bad{border-color:var(--bad);background:#fdeaea}
+.buckets{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:8px}
+@media (max-width:560px){.buckets{grid-template-columns:1fr}}
+.bucket{border:2px solid #dedeea;border-radius:12px;min-height:110px;background:#f7f7fb}
+.bucket.target{border-color:var(--accent);background:#fff6f3}
+.bh{font-weight:900;padding:8px;-webkit-hyphens:auto;hyphens:auto;overflow-wrap:anywhere;border-bottom:1px solid #dedeea;text-align:center;font-size:14px}
+.bc{display:flex;flex-direction:column;gap:6px;padding:8px}
+textarea{width:100%;font:inherit;font-size:16px;border:2px solid #d8d8e6;border-radius:10px;padding:10px;color:var(--ink);margin-top:6px}
+.ctext{margin-top:12px;background:#f6f6fb;border-radius:12px;padding:12px}
+.ctext label{font-weight:800;font-size:15px}
+.arow{display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px;align-items:center;margin:7px 0}
+.arow span{font-weight:700;font-size:14px}
+@media (max-width:520px){.arow{grid-template-columns:1fr}}
+select{font-size:15px;padding:9px;border-radius:9px;border:2px solid #d8d8e6;width:100%;background:#fff;color:var(--ink)}
+select.ok{border-color:var(--ok);background:#f1faf5}select.bad{border-color:var(--bad);background:#fdf1f1}
+.solved{font-weight:900;color:var(--ok);margin:8px 0}
+.sline{font-size:15px;margin:5px 0}
+.myans{background:#f4f4f9;border-radius:10px;padding:10px;margin-top:8px;font-size:15px;white-space:pre-wrap}
+.ex{background:#eef9f7;border-left:4px solid var(--accent2);padding:8px 11px;border-radius:0 8px 8px 0;margin-top:8px;font-size:14px;line-height:1.45}
+/* MODAL */
+.modal{position:fixed;inset:0;background:rgba(5,5,15,.72);z-index:60;display:none;align-items:center;justify-content:center;padding:14px}
+.modal.on{display:flex}
+.mcard{background:#fffdf8;color:var(--ink);border-radius:20px;max-width:760px;width:100%;max-height:90vh;overflow:auto;padding:20px 22px 22px;animation:fadeup .25s ease;-webkit-overflow-scrolling:touch}
+.mtop{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.mtop .mico{font-size:30px}
+.mtop h2{margin:0;font-size:21px;flex:1}
+.mclose{background:var(--ink);color:#fff;border:0;border-radius:10px;padding:9px 14px;font-weight:800}
+.letter{background:#fff;border:1px solid #e3ddcf;border-radius:6px;padding:20px 22px;font-family:Georgia,"Times New Roman",serif;font-size:16px;line-height:1.55;box-shadow:0 4px 14px #0001}
+.letter .lh{display:flex;justify-content:space-between;font-family:-apple-system,Helvetica,Arial,sans-serif;font-size:12px;color:#777;margin-bottom:12px;gap:10px}
+.letter .stamp{color:#b33;font-weight:800;border:2px solid #b33;border-radius:6px;padding:2px 8px;transform:rotate(-3deg);display:inline-block}
+.note{background:#fff7b8;border-radius:4px;padding:18px 20px;font-family:"Marker Felt","Chalkboard SE","Comic Sans MS",cursive;font-size:18px;line-height:1.55;transform:rotate(-.6deg);box-shadow:0 6px 16px #0002}
+.note li{margin:4px 0}
+.chat{background:#e9e4dc;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.chat .chead{font-weight:800;text-align:center;font-size:14px;color:#555}
+.bub{max-width:82%;padding:9px 12px;border-radius:14px;font-size:15px;line-height:1.4;background:#fff}
+.bub b{display:block;font-size:12px;color:#8a3b25}
+.bub.me{align-self:flex-end;background:#d4f5c4}
+.screenbox{background:#1e2233;color:#e8ecf6;border-radius:12px;padding:14px;font-size:15px;line-height:1.5}
+.screenbox .mailh{border-bottom:1px solid #3a4060;padding-bottom:8px;margin-bottom:8px;font-size:13px;color:#aab}
+.screenbox .big{font-size:26px;font-weight:900}
+.info{border:3px solid var(--accent);border-radius:14px;overflow:hidden;background:#fff}
+.info h3{margin:0;background:var(--accent);color:#fff;padding:11px 14px;font-size:18px}
+.info dl{display:grid;grid-template-columns:150px minmax(0,1fr);margin:0}
+.info dt,.info dd{margin:0;padding:9px 12px;border-bottom:1px solid #f0e6e2;font-size:15px;line-height:1.45}
+.info dt{font-weight:800;background:#fff6f3}
+@media (max-width:520px){.info dl{grid-template-columns:1fr}.info dt{border-bottom:0}}
+.info .intro{padding:12px 14px;font-size:15px;line-height:1.5;border-bottom:1px solid #f0e6e2}
+.merke{background:#e9fbf8;border-left:5px solid var(--accent2);padding:10px 13px;margin-top:12px;font-size:15px;line-height:1.45;border-radius:0 10px 10px 0}
+table.t{border-collapse:collapse;width:100%;font-size:14px;margin-top:6px}
+table.t th,table.t td{border:1px solid #e3dcd4;padding:8px;text-align:left;vertical-align:top;line-height:1.35}
+table.t th{background:#fff1ec}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.akte th:first-child,.akte td:first-child{font-weight:800;background:#faf6f0;white-space:nowrap}
+.akte td.empty{color:#bbb;text-align:center}
+.flavor{font-size:16px;line-height:1.55}
+.speech{background:#fff;border:2px solid #ddd;border-radius:16px;padding:14px 16px;font-size:16px;line-height:1.5;position:relative}
+.done-ov{text-align:center;padding:10px}
+.done-ov .big{font-size:60px}
+.done-ov h2{font-size:28px;margin:6px 0}
+.toast{position:fixed;left:50%;top:84px;transform:translateX(-50%) translateY(-20px);background:var(--ok);color:#fff;font-weight:800;padding:12px 20px;border-radius:999px;z-index:80;opacity:0;transition:all .35s;pointer-events:none;box-shadow:0 8px 20px #0006}
+.akread .rtext{font-size:16px;margin:6px 0 12px}.akstep{font-weight:900;margin:8px 0 4px;color:#1d1d2b}
+.toast.neg{background:var(--bad)}
+.sub.fly{animation:subin .4s ease-out}
+@keyframes subin{from{opacity:0;transform:translate(-50%,26px)}to{opacity:1;transform:translate(-50%,0)}}
+.rtext{font-size:17px;line-height:1.75;background:#fff;border:3px solid var(--accent);border-radius:14px;padding:0 20px 18px;overflow:hidden}
+.rtext h3{margin:0 -20px 16px;background:var(--accent);color:#fff;padding:11px 20px;font-size:19px}
+.rtext p{margin:0 0 14px;max-width:62ch}.rtext p:last-child{margin-bottom:0}.rtext b{color:#000;font-weight:800}
+.wallet{background:#163626;color:#7ff0b4;border:1px solid #2a9d63;border-radius:999px;padding:8px 13px;font-weight:900;font-size:15px;white-space:nowrap;display:inline-block}
+.wallet.neg{background:#3a1616;color:#ff9b9b;border-color:#d64545}.wallet.bump{animation:bump .5s ease}
+@keyframes bump{30%{transform:scale(1.25)}}
+.cool{background:#fff6e6;border:2px solid var(--gold);border-radius:12px;padding:12px 14px;font-size:15px;line-height:1.5}
+.cool-h{font-weight:900;color:var(--bad);margin-bottom:4px}.cool-row{margin-top:10px;padding:8px 10px;background:#fff;border-radius:8px}.cool-row.ok{background:#e6f5ec;color:#1e6b44}
+.cool .ct{font-size:20px;font-weight:900}
+.earn{background:#f1faf5;border:2px solid var(--ok);border-radius:14px;padding:14px;margin:14px auto;max-width:520px;font-size:15px;line-height:1.5}
+.earn-big{font-size:34px;font-weight:900;color:var(--ok)}.earn-big.neg{color:var(--bad)}
+.stats{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:16px}.st{background:#f4f4f9;border-radius:12px;padding:10px 16px;min-width:130px}
+.stv{font-size:24px;font-weight:900}.stv.neg{color:var(--bad)}.stl{font-size:13px;color:#666}
+.fp{font-size:16px;line-height:1.55}.negt{color:var(--bad)}
+.firms{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-top:10px}
+.firm{text-align:left;border:2px solid #ddd;border-radius:12px;padding:12px;background:#fafafe;color:var(--ink)}
+.firm.sel{border-color:var(--accent);background:#fff3ef;box-shadow:0 0 0 4px #ff6b4a33}.firm.no{opacity:.45;cursor:not-allowed}
+.firm .fk{font-size:20px;font-weight:900}.firm .fn{font-size:13px;color:#555;min-height:34px}.firm .fm{font-size:13px;margin-top:6px;font-weight:700}.firm .fs{font-size:13px;margin-top:4px}
+.ffrm{margin-top:16px;background:#f6f6fb;border-radius:14px;padding:16px}.ffrm h3{margin-top:0}
+.ffrm label{display:block;font-weight:800;font-size:15px;margin-top:10px}.ffrm input{display:block;width:100%;font-size:18px;padding:11px 12px;border:2px solid #d8d8e6;border-radius:10px;margin-top:6px;color:var(--ink)}
+.fprev{font-size:22px;font-weight:900;margin-top:14px;color:var(--accent)}
+.broke{background:#fdeaea;border:2px solid var(--bad);border-radius:12px;padding:14px;font-size:16px;line-height:1.5}
+.doc{border:6px double var(--ink);border-radius:12px;padding:24px;background:#fffdf6;text-align:center;position:relative;max-width:720px;margin:0 auto}
+.doc-h{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#777;font-weight:800}
+.doc-firm{font-size:clamp(26px,4vw,40px);font-weight:900;margin:12px 0 4px;color:var(--ink)}.doc-form{font-size:15px;color:#555;margin-bottom:14px}
+.doc-t{margin:0 auto;border-collapse:collapse;text-align:left;font-size:15px}.doc-t td{padding:6px 10px;border-bottom:1px solid #eee;vertical-align:top}.doc-t td:first-child{font-weight:800;color:#555;white-space:nowrap}
+.doc-stamp{display:inline-block;margin-top:16px;border:3px solid var(--ok);color:var(--ok);font-weight:900;font-size:20px;padding:4px 14px;border-radius:8px;transform:rotate(-4deg)}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+/* FINAL */
+#final{padding:24px clamp(16px,4vw,48px) 60px;background:#101125}
+.cert{background:#fffdf6;color:var(--ink);border-radius:20px;padding:26px;text-align:center;border:6px double var(--gold);max-width:820px;margin:0 auto}
+.cert h1{margin:6px 0;font-size:clamp(26px,4vw,38px)}
+.cert .nm{font-size:clamp(24px,3.5vw,34px);font-weight:900;color:var(--accent);margin:8px 0}
+.fsec{max-width:1000px;margin:24px auto 0;background:#fff;color:var(--ink);border-radius:18px;padding:18px}
+.fsec h2{margin-top:0}
+.ansitem{border-bottom:1px solid #eee;padding:10px 0}
+.ansitem b{display:block;font-size:14px;color:#555}
+</style>
+</head>
+<body>
+
+<!-- START -->
+<section id="start" class="screen">
+  <div class="startcard">
+    <div class="logo">Re<span>Jeans</span></div>
+    <div class="tagline">Eine Firma. Viele Formen. Ein Lernpfad zu den Rechtsformen.</div>
+    <div class="small">WTH/S · Klasse 8 · ca. 60 Minuten · 6 Szenen</div>
+    <div class="namebox">
+      <label for="nameIn">Nickname</label>
+      <input id="nameIn" autocomplete="off" maxlength="20" placeholder="z. B. JeansQueen">
+    </div>
+    <button class="bigbtn" id="startBtn" disabled>Los geht's ▸</button>
+    <p class="small" style="margin-top:22px">🎧 Kopfhörer auf! Es läuft ruhige Musik (oben rechts abschaltbar).<br>💰 Für jede richtig gelöste Quest verdienst du Geld – jeder Fehler kostet Geld. Am Ende gründest du damit deine eigene Firma!</p>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu" class="screen">
+  <div class="menuhead">
+    <div><h1>Episodenübersicht</h1><p id="menuHello"></p></div>
+    <div style="display:flex;gap:8px;align-items:center"><span class="wallet"></span><button class="tb" id="menuAkte">📁 Gründungsakte</button></div>
+  </div>
+  <div class="eps" id="eps"></div>
+  <button class="reset" id="resetBtn">Lehrkraft: Fortschritt auf diesem Gerät zurücksetzen</button>
+</section>
+
+<!-- CUTSCENE -->
+<section id="cut" class="screen">
+  <div class="film" id="film">
+    <div class="bg" id="cutBg"></div>
+    <div class="vig"></div>
+    <div class="bar top"></div><div class="bar bot"></div>
+    <div class="cap" id="cutCap"></div>
+    <div class="fx" id="cutFx"></div>
+    <div class="sub" id="cutSub">
+      <div class="ava" id="cutAva"></div>
+      <div class="whobox"><div class="whoname" id="cutWho"></div><div class="txt" id="cutTxt"></div></div>
+    </div>
+    <div class="cctl"><button id="cutSound">🎵 Musik an</button><button id="cutSkip">Überspringen ⏭</button></div>
+    <div class="dots" id="cutDots"></div>
+    <div class="tapnext">Tippen = weiter ▸</div>
+    <div class="titlecard" id="titlecard">
+      <div class="tc-ep" id="tcEp"></div>
+      <div class="tc-title" id="tcTitle"></div>
+      <div class="tc-sub" id="tcSub"></div>
+      <button class="playbtn" id="tcPlay">▶ Film starten</button>
+      <div class="tc-note">Der Film läuft automatisch. Tippe auf das Bild, um schneller weiterzukommen.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ROOM -->
+<section id="room" class="screen">
+  <div class="topbar">
+    <button class="tb" id="toMenu">☰ Übersicht</button>
+    <div class="tbmid"><div class="t1" id="rTag"></div><div class="t2" id="rTitle"></div></div>
+    <span class="wallet"></span>
+    <button class="tb" id="roomSound">🎵 Musik an</button>
+    <button class="tb" id="replay">🎬 Intro</button>
+    <button class="tb" id="roomAkte">📁 Akte</button>
+  </div>
+  <div class="mainquest">
+    <div class="mq-ico">🎯</div>
+    <div><div class="mq-label">Hauptquest</div><div class="mq-text" id="mq"></div></div>
+  </div>
+  <div class="layout">
+    <div class="roomcol">
+      <div class="stage" id="stage"></div>
+      <div class="roomhint" id="roomHint"></div>
+    </div>
+    <div class="qpanel">
+      <div class="qph"><span>📜 Quests</span><span class="qcount" id="qcount"></span></div>
+      <div class="pbar"><i id="qbar"></i></div>
+      <div id="quests"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section id="final" class="screen">
+  <div style="max-width:1000px;margin:0 auto 16px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
+    <button class="tb" id="finMenu">☰ Übersicht</button>
+    <button class="tb" id="finReplay">🎬 Abspann ansehen</button>
+  </div>
+  <div class="cert">
+    <div style="font-size:54px">🏆</div>
+    <div class="small" style="color:#888;letter-spacing:.2em;text-transform:uppercase;font-weight:800">Gründungsakte vollständig</div>
+    <div class="nm" id="certName"></div>
+    <h1>hat Lea von der Nähmaschine bis zur AG begleitet.</h1>
+    <p style="font-size:16px;color:#555" id="certDate"></p>
+    <div class="stats" id="finStats"></div>
+    <p style="font-size:17px;margin-top:14px"><b>Nächste Folge: ESCAPE ROOM.</b> Dein Advance Organizer ist dein wichtigstes Werkzeug. Präg ihn dir gut ein!</p>
+  </div>
+  <div class="fsec" id="founder"></div>
+  <div class="fsec"><h2>📁 Leas Gründungsakte</h2><div id="finAkte"></div></div>
+  <div class="fsec"><h2>✍️ Deine Begründungen</h2><div id="finAns"></div></div>
+</section>
+
+<div class="modal" id="modal"><div class="mcard" id="mcard"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== DATEN ===================== */
+const CH={
+  Lea:{n:'Lea',c:'#ff6b4a',i:'L',p:1.15},
+  Tom:{n:'Tom',c:'#14a594',i:'T',p:.85},
+  Lindner:{n:'Frau Lindner · Steuerberaterin',c:'#7f6ad6',i:'FL',p:1.05},
+  Kaya:{n:'Frau Kaya · Investorin',c:'#d99a1c',i:'K',p:.95},
+  Notar:{n:'Dr. Weiß · Notar',c:'#5f5e5a',i:'W',p:.75},
+  Jonas:{n:'Jonas',c:'#4f8a1c',i:'J',p:1.25},
+  Rosi:{n:'Oma Rosi',c:'#c2477a',i:'R',p:1.3},
+  Anrufer:{n:'Unbekannter Anrufer',c:'#444',i:'?',p:.9},
+  Beamter:{n:'Herr Krause · Gewerbeamt',c:'#3b6ea8',i:'K',p:.8}
+};
+
+const AKTE_ROWS=[
+ {k:'a',l:'Abkürzung bedeutet',o:['Aktiengesellschaft','Gesellschaft bürgerlichen Rechts','eingetragene Kauffrau / eingetragener Kaufmann','Gesellschaft mit beschränkter Haftung','Kommanditgesellschaft','Offene Handelsgesellschaft','Unternehmergesellschaft (haftungsbeschränkt)']},
+ {k:'g',l:'Anzahl Gründer',o:['genau 1 Person','mind. 1 Person','mind. 2 Personen','mind. 1 Komplementär + 1 Kommanditist']},
+ {k:'k',l:'Mindestkapital',o:['kein Mindestkapital','ab 1 €','mind. 25.000 €','mind. 50.000 €']},
+ {k:'l',l:'Wer leitet?',o:['Inhaber/in allein','alle Gesellschafter gemeinsam','die Komplementäre','Geschäftsführer/in','der Vorstand']},
+ {k:'h',l:'Haftung',o:['unbeschränkt – auch mit dem Privatvermögen','alle unbeschränkt – jeder für alle Schulden','Komplementär unbeschränkt, Kommanditist nur mit seiner Einlage','nur Gesellschaftsvermögen – Gesellschafter riskieren nur ihre Einlage','nur Gesellschaftsvermögen – Aktionäre riskieren nur ihre Aktien']},
+ {k:'r',l:'Handelsregister',o:['erst nötig, wenn das Unternehmen größer wird','nicht nötig (freiwillig möglich)','ja, Pflicht']},
+ {k:'z',l:'Firmenzusatz',o:['e.K.','GbR','OHG','KG','GmbH','UG (haftungsbeschränkt)','AG']}
+];
+const AKTE_COLS={EU:'Einzel­unternehmen',GbR:'GbR',OHG:'OHG',KG:'KG',GmbH:'GmbH',UG:'UG',AG:'AG'};
+const AKTE_SOL={
+ EU:{a:2,g:0,k:0,l:0,h:0,r:0,z:0},
+ GbR:{a:1,g:2,k:0,l:1,h:1,r:1,z:1},
+ OHG:{a:5,g:2,k:0,l:1,h:1,r:2,z:2},
+ KG:{a:4,g:3,k:0,l:2,h:2,r:2,z:3},
+ GmbH:{a:3,g:1,k:2,l:3,h:3,r:2,z:4},
+ UG:{a:6,g:1,k:1,l:3,h:3,r:2,z:5},
+ AG:{a:0,g:1,k:3,l:4,h:4,r:2,z:6}
+};
+
+const SCENES=[
+/* ---------- SZENE 1 ---------- */
+{id:'eu',nr:1,ico:'🧵',title:'Alles auf eine Karte',form:'Einzelunternehmen',room:'zimmer',
+ main:'Finde heraus, was ein Einzelunternehmen ist – und was mit Leas Erspartem passiert, wenn ihre Firma Schulden hat.',
+ intro:[
+  {bg:'zimmer',cap:'Chemnitz · Leas WG-Zimmer · 2:13 Uhr',sp:'E',tx:'Überall liegen alte Jeans. Die Nähmaschine rattert durch die Nacht.'},
+  {sp:'Lea',tx:'Noch ein Hoodie … dann geh ich schlafen. Versprochen.'},
+  {sp:'E',fx:'📱',tx:'Ihr Handy vibriert. „Neue Bestellung bei @rejeans_chemnitz“ – schon die zwölfte heute.'},
+  {sp:'Lea',tx:'Seit ich die Doku über SHEIN gesehen habe, weiß ich: Ich mache das anders. Fair. Und aus alten Jeans.'},
+  {sp:'E',fx:'✉️',tx:'Auf dem Schreibtisch liegt ein Brief vom Gewerbeamt Chemnitz.'},
+  {sp:'Lea',tx:'„Bitte melden Sie Ihr Gewerbe an“? Moment … bin ich jetzt etwa eine Firma?'},
+  {cap:'Zwei Monate später',sp:'E',tx:'Lea hat Stoff für 4.000 € bestellt. Doch es ist Sommer – und im Sommer kauft niemand Hoodies.'},
+  {sp:'Lea',fx:'💸',tx:'Der Lieferant will sein Geld. Auf dem Firmenkonto sind nur 1.000 €. Was passiert jetzt mit meinem Ersparten?'},
+  {sp:'E',tx:'Ab jetzt bist du Lea. Untersuche dein Zimmer: Tippe auf die leuchtenden Gegenstände und erfülle die Quests.'}
+ ],
+ objects:[
+  {id:'brief',ico:'✉️',label:'Brief vom Gewerbeamt',x:43,y:51,html:`
+   <div class="letter"><div class="lh"><span>Stadt Chemnitz · Gewerbeamt</span><span class="stamp">WICHTIG</span></div>
+   Sehr geehrte Frau Berger,<br><br>wie wir erfahren haben, verkaufen Sie selbst genähte Kleidung unter dem Namen „ReJeans“. Damit betreiben Sie ein Gewerbe. Bitte melden Sie es bei uns an.<br><br>Da Sie das Unternehmen allein führen, handelt es sich um ein <b>Einzelunternehmen</b>. Beigefügt erhalten Sie unser Merkblatt.<br><br>Mit freundlichen Grüßen<br>Krause, Gewerbeamt</div>
+   <div style="height:14px"></div>
+   <div class="rtext"><h3>📄 Merkblatt: Das Einzelunternehmen</h3><p>Ein <b>Einzelunternehmen</b> gründet <b>genau eine Person</b>: die Inhaberin oder der Inhaber. Ein <b>Mindestkapital</b> braucht man <b>nicht</b>.</p><p>Die Inhaberin <b>entscheidet allein</b>. Ihr gehört der ganze Gewinn – aber sie trägt auch allein den Verlust.</p><p>Sie haftet <b>unbeschränkt</b>, also auch mit ihrem <b>Privatvermögen</b>, zum Beispiel mit ihrem Ersparten oder ihrem Roller.</p><p>Ins <b>Handelsregister</b> muss das Einzelunternehmen erst, wenn es <b>größer wird</b>. Dann heißt es z. B. „ReJeans <b>e.K.</b>“. Das steht für <b>eingetragene Kauffrau</b> bzw. <b>eingetragener Kaufmann</b>.</p></div>
+   <div class="merke"><b>Was heißt „Haftung“?</b><br>Haftung bedeutet: Wer muss mit seinem Geld einstehen, wenn ein Unternehmen seine Schulden nicht bezahlen kann?</div>`},
+  {id:'notiz',ico:'📓',label:'Leas Notizbuch',x:77,y:61,html:`
+   <div class="note"><b>3:40 Uhr. Kann nicht schlafen. 😩</b><br>Was ist eigentlich gut daran, dass ich das alles allein mache – und was nicht?
+   <ul><li>Ich entscheide alles allein. Keiner redet mir rein!</li><li>Wenn es schiefgeht, muss ich den Verlust allein tragen.</li><li>Der ganze Gewinn gehört mir.</li><li>Ich brauchte kein Startkapital, um loszulegen.</li><li>Ich hafte sogar mit meinem Sparbuch.</li><li>Wenn ich krank bin, steht alles still.</li><li>Ich habe nur mein eigenes Geld zur Verfügung.</li></ul></div>`},
+  {id:'laptop',ico:'💻',label:'Laptop',x:28,y:47,html:`
+   <div class="screenbox"><div class="mailh">📧 Von: buchhaltung@stoffhandel-saxonia.de · Betreff: <b>Zahlungserinnerung</b></div>
+   Sehr geehrte Frau Berger,<br>unsere Rechnung über <b>4.000 €</b> für 120 m Bio-Baumwolle ist seit 30 Tagen fällig. Bitte überweisen Sie den Betrag umgehend.</div>
+   <div style="height:12px"></div>
+   <div class="screenbox"><div class="mailh">🏦 Online-Banking · Geschäftskonto „ReJeans“</div>Kontostand:<div class="big">1.000,00 €</div></div>`},
+  {id:'spar',ico:'🐷',label:'Sparbuch',x:19,y:18,html:`
+   <div class="flavor">Leas Sparbuch – seit ihrer Konfirmation spart sie für ein eigenes Auto.</div>
+   <div class="screenbox" style="margin-top:10px"><div class="mailh">📘 Sparbuch · Lea Berger · <b>privat</b></div>Guthaben:<div class="big">2.500,00 €</div></div>`},
+  {id:'roller',ico:'🔑',label:'Rollerschlüssel',x:57,y:30,html:`
+   <div class="note">Mein Roller 🛵<br>Gebraucht gekauft, mein ganzer Stolz.<br>Wert heute: ca. <b>1.500 €</b><br>Gehört mir – <b>privat</b>, nicht der Firma.</div>`}
+ ],
+ tasks:[
+  {id:'1a',op:'Nenne',title:'Was bin ich eigentlich?',needs:['brief'],type:'choice',
+   q:'Nenne die Rechtsform, die Lea mit ReJeans gerade hat.',
+   options:['Einzelunternehmen','GbR','GmbH','Aktiengesellschaft'],correct:0,
+   wrong:{1:'Für eine GbR braucht man mindestens zwei Personen. Lea arbeitet allein.',2:'Hat Lea einen Notar besucht oder 25.000 € eingezahlt? Lies den Brief noch einmal.',3:'Eine Aktiengesellschaft mit Aktionären? Dafür ist ReJeans noch viel zu klein.'},
+   hints:['Lies den Brief vom Gewerbeamt genau.']},
+  {id:'1b',op:'Ordne zu',title:'Leas schlaflose Nacht',needs:['notiz'],type:'sort',
+   q:'Ordne Leas Gedanken aus dem Notizbuch zu: Was ist ein Vorteil, was ein Nachteil des Einzelunternehmens?',
+   buckets:['👍 Vorteil','👎 Nachteil'],
+   items:[{t:'Ich entscheide alles allein.',b:0},{t:'Ich muss den Verlust allein tragen.',b:1},{t:'Der ganze Gewinn gehört mir.',b:0},{t:'Ich brauche kein Startkapital.',b:0},{t:'Ich hafte auch mit meinem Sparbuch.',b:1},{t:'Wenn ich krank bin, steht alles still.',b:1},{t:'Ich habe nur mein eigenes Geld zur Verfügung.',b:1}],
+   hints:['Frag dich bei jeder Karte: Freut sich Lea darüber – oder macht es ihr Sorgen?']},
+  {id:'1d',op:'Begründe',title:'Ist der Roller weg?',needs:['roller','brief'],type:'choicetext',
+   q:'Entscheide: Lea zahlt 1.000 € vom Firmenkonto und räumt ihr Sparbuch (2.500 €) leer. Trotzdem fehlen dem Lieferanten noch 500 €. Muss Lea auch ihren Roller verkaufen?',
+   options:['Ja, Lea muss den Roller verkaufen.','Nein, der Roller ist privat und deshalb geschützt.'],correct:0,
+   wrong:{1:'Lies im Merkblatt den Absatz über die Haftung: Ist das Privatvermögen einer Einzelunternehmerin geschützt?'},
+   tprompt:'Begründe deine Entscheidung. Verwende dabei den Begriff „Haftung“.',min:40,kw:[['haft'],['privat','unbeschränkt','sparbuch','erspart','eigen','alles']],kwMsg:'Verwende den Begriff „Haftung“ (oder „haftet“) und erkläre, womit Lea haftet.',
+   hints:['Im Merkblatt steht, womit eine Einzelunternehmerin haftet.','Es fehlen nach dem Sparbuch noch 500 € – woher soll Lea die nehmen?']},
+  {id:'1e',op:'Ergänze',title:'Gründungsakte: Einzelunternehmen',needs:['brief'],type:'akte',col:'EU',
+   q:'Lies den Text und ergänze dann in der Gründungsakte die Spalte „Einzelunternehmen“.',
+   hints:['Alle Angaben findest du im Merkblatt, das am Brief vom Gewerbeamt hängt.']}
+ ]},
+/* ---------- SZENE 2 ---------- */
+{id:'gbr',nr:2,ico:'🤝',title:'Ein Handschlag unter Freunden',form:'GbR',room:'cafe',
+ main:'Finde heraus, was der Handschlag mit Tom rechtlich bedeutet – und ob Tom wirklich allein 12.000 € zahlen muss.',
+ intro:[
+  {bg:'cafe',cap:'Café am Brühl · Oktober',sp:'E',tx:'Der Sommer ist vorbei. Die Hoodies verkaufen sich wieder. Und Lea hat Besuch.'},
+  {sp:'Tom',tx:'Ich bin Tom. Fotograf. Und ehrlich gesagt: Deine Produktfotos sind … ausbaufähig.'},
+  {sp:'Lea',tx:'Na danke auch.'},
+  {sp:'Tom',tx:'Ich mache dir Shootings, Reels, alles. Dafür steige ich mit ein. Fifty-fifty?'},
+  {sp:'Lea',fx:'🤝',tx:'Deal!'},
+  {sp:'E',tx:'Kein Notar. Kein Vertrag. Nur ein Handschlag – und ein Satz auf einer Serviette. Trotzdem ist gerade eine neue Firma entstanden.'},
+  {cap:'Drei Monate später',sp:'E',fx:'📱',tx:'Toms Handy klingelt. Am Telefon: Herr Möller vom Stofflager Möller.'},
+  {sp:'Tom',tx:'Wie bitte? Ich soll die kompletten 12.000 € zahlen? Ich allein?! Mir gehört doch nur die Hälfte!'},
+  {sp:'E',tx:'Tom ist völlig aufgelöst. Du bist Lea. Finde heraus, ob Herr Möller recht hat.'}
+ ],
+ objects:[
+  {id:'serv',ico:'🧻',label:'Serviette',x:35,y:67,html:`
+   <div class="note" style="background:#fff">ReJeans 🧵📸<br><b>Lea + Tom</b><br>Ab heute machen wir das zusammen.<br>Alles <b>50 : 50</b> – Arbeit, Gewinn <u>und</u> Verlust!<br><br>✍️ Lea &nbsp;&nbsp; ✍️ Tom &nbsp;&nbsp; 🤝 03.10.</div>`},
+  {id:'buch',ico:'📖',label:'Buch „Gründen leicht gemacht“',x:21,y:72,html:`
+   <div class="flavor" style="margin-bottom:10px">Tom hat das Buch mitgebracht. Ein Lesezeichen steckt auf Seite 42.</div>
+   <div class="rtext"><h3>📖 Seite 42: Die GbR</h3><p><b>GbR</b> steht für <b>Gesellschaft bürgerlichen Rechts</b>. Sie entsteht, sobald sich <b>mindestens zwei Personen</b> zusammentun, um gemeinsam ein Geschäft zu betreiben. Ein <b>Mindestkapital</b> braucht man <b>nicht</b>.</p><p>Der Vertrag darf auch <b>mündlich</b> geschlossen werden – sogar ein <b>Handschlag</b> reicht. Die Gesellschafter <b>führen die GbR gemeinsam</b>.</p><p>Jeder Gesellschafter haftet <b>unbeschränkt</b>, also auch privat – und zwar für die <b>gesamten Schulden</b>. Der Gläubiger darf sich <b>aussuchen</b>, von wem er das Geld verlangt.</p><p>Ins <b>Handelsregister</b> muss die GbR <b>nicht</b> (freiwillig ist es möglich). Der Zusatz lautet z. B. „ReJeans <b>GbR</b>“.</p></div>`},
+  {id:'handy',ico:'📱',label:'Toms Nachrichten',x:47,y:73,html:`
+   <div class="chat"><div class="chead">Tom 📸</div>
+    <div class="bub"><b>Tom</b>LEA!!! 😱😱</div>
+    <div class="bub"><b>Tom</b>Möller vom Stofflager hat angerufen. Er will die 12.000 € von MIR. Alles!</div>
+    <div class="bub"><b>Tom</b>Wieso ich?? Wir haben doch fifty-fifty gesagt! Ich zahl doch höchstens 6.000!</div>
+    <div class="bub"><b>Tom</b>Ich hab nur 7.000 € auf meinem Privatkonto… das war für meine neue Kamera 😭</div>
+    <div class="bub me">Ruhig bleiben. Ich schau nach, was da rechtlich gilt. 🔍</div></div>`},
+  {id:'mahn',ico:'✉️',label:'Mahnung',x:66,y:46,html:`
+   <div class="letter"><div class="lh"><span>Stofflager Möller · Zwickauer Str. 12 · Chemnitz</span><span class="stamp">2. MAHNUNG</span></div>
+   An: Herrn Tom Vogel, Gesellschafter der ReJeans GbR<br><br>Sehr geehrter Herr Vogel,<br><br>die Rechnung Nr. 2291 über <b>12.000 €</b> (Denim-Stoffe, Reißverschlüsse, Garn) ist weiterhin offen. Da Frau Berger derzeit nicht zahlen kann, wenden wir uns direkt an Sie.<br><br>Wir fordern Sie auf, den <b>gesamten Betrag</b> innerhalb von 14 Tagen zu überweisen.<br><br>Mit freundlichen Grüßen<br>K. Möller</div>`},
+  {id:'kaffee',ico:'☕',label:'Cappuccino',x:79,y:37,html:`<div class="flavor">Ein Cappuccino für 3,40 €. Längst kalt geworden – vor lauter Aufregung hat Lea vergessen, ihn zu trinken. ☕💔<br><br><i>Hier gibt es nichts zu lernen. Aber gut, dass du gründlich bist!</i></div>`}
+ ],
+ tasks:[
+  {id:'2b',op:'Prüfe',title:'Stimmt das?',needs:['buch'],type:'tf',
+   q:'Prüfe die Aussagen über die GbR. Sind sie wahr oder falsch?',
+   items:[
+    {t:'Ein GbR-Vertrag kann auch mündlich geschlossen werden.',a:true},
+    {t:'Für eine GbR braucht man mindestens 2.500 € Startkapital.',a:false,fix:'Es gibt kein Mindestkapital.'},
+    {t:'In der GbR haftet jede Person nur für ihren eigenen Anteil an den Schulden.',a:false,fix:'Jede Person haftet für die gesamten Schulden.'},
+    {t:'Lea und Tom führen die GbR gemeinsam.',a:true},
+    {t:'Für eine GbR braucht man mindestens zwei Personen.',a:true}],
+   hints:['Alle Antworten stehen im Buch auf Seite 42.']},
+  {id:'2c',op:'Beurteile',title:'Hat Herr Möller recht?',needs:['mahn','handy','buch'],type:'choicetext',
+   q:'Darf Herr Möller die vollen 12.000 € von Tom verlangen? Beurteile die Situation.',
+   options:['Nein – Tom muss nur seine Hälfte, also 6.000 €, zahlen.','Ja – in der GbR haftet jeder Gesellschafter für die gesamten Schulden, auch mit seinem Privatvermögen.','Nein – zahlen muss nur Lea, weil sie die Firma zuerst gegründet hat.','Ja – aber nur mit dem Geld auf dem Firmenkonto, nicht mit Toms Privatgeld.'],correct:1,
+   wrong:{0:'Das denkt Tom auch – aber lies im Buch, wofür jeder Gesellschafter haftet.',2:'Lea und Tom sind beide Gesellschafter. Gilt die Haftung für beide?',3:'Lies im Buch nach: Ist die Haftung in der GbR beschränkt?'},
+   tprompt:'Erkläre Tom in eigenen Worten, warum das so ist.',min:40,kw:[['haft'],['gesamt','ganz','alle','komplett','12.000','12000','voll']],kwMsg:'Erkläre, wofür jeder Gesellschafter in der GbR haftet. Verwende „haftet“ und denke an die gesamten Schulden.',
+   hints:['Im Buch steht: Der Gläubiger darf sich aussuchen, von wem er das Geld verlangt.']},
+  {id:'2e',op:'Ergänze',title:'Gründungsakte: GbR',needs:['buch'],type:'akte',col:'GbR',
+   q:'Lies den Text und ergänze dann in der Gründungsakte die Spalte „GbR“.',
+   hints:['Alle Angaben stehen im Buch auf Seite 42.']}
+ ]},
+/* ---------- SZENE 3 ---------- */
+{id:'ohg',nr:3,ico:'🏪',title:'Jetzt wird es offiziell',form:'OHG',room:'laden',
+ main:'Finde heraus, was sich für Lea und Tom mit der OHG ändert – und was gleich bleibt.',
+ intro:[
+  {bg:'laden',cap:'Ein Jahr später · ReJeans-Laden in der Chemnitzer Innenstadt',sp:'E',tx:'Aus der Serviette ist ein echter Laden geworden: 300 Bestellungen im Monat, eine Kasse, eine Aushilfe.'},
+  {sp:'Tom',tx:'Wahnsinn. Vor einem Jahr haben wir noch in deinem WG-Zimmer genäht.'},
+  {sp:'E',fx:'🔔',tx:'Die Ladentür klingelt. Frau Lindner, die Steuerberaterin der beiden, kommt herein.'},
+  {sp:'Lindner',tx:'Ihr zwei seid kein Hobby mehr. Ihr seid ein richtiges Handelsunternehmen. Ihr müsst ins Handelsregister – ab jetzt seid ihr eine OHG.'},
+  {sp:'Tom',tx:'Und ändert sich dann etwas an unserer Haftung?'},
+  {sp:'Lindner',tx:'Leider nicht. Ich lasse euch meinen Ordner da. Lest ihn euch gut durch.'},
+  {sp:'E',fx:'💬',tx:'Am Abend explodiert Leas Gruppenchat. Ihre Freunde haben viele Meinungen zur OHG – mit erstaunlich viel Halbwissen.'},
+  {sp:'E',tx:'Du bist Lea. Finde heraus, was sich mit der OHG ändert – und wer im Gruppenchat Unsinn erzählt.'}
+ ],
+ objects:[
+  {id:'ordner',ico:'📂',label:'Ordner von Frau Lindner',x:53,y:52,html:`
+   <div class="rtext"><h3>📂 Die OHG</h3><p><b>OHG</b> steht für <b>Offene Handelsgesellschaft</b>. Eine GbR wird zur OHG, wenn sie ein größeres <b>Handelsgewerbe</b> betreibt. Man braucht <b>mindestens zwei Personen</b>, aber <b>kein Mindestkapital</b>.</p><p><b>Alle Gesellschafter</b> dürfen die Firma führen und Entscheidungen treffen.</p><p>Alle haften <b>unbeschränkt</b>, auch mit ihrem Privatvermögen. Sie haften <b>direkt</b> (ein Gläubiger kann sich an jeden wenden) und <b>solidarisch</b> (jeder für die <b>gesamten Schulden</b>).</p><p>Die OHG <b>muss</b> ins <b>Handelsregister</b>. Der Zusatz lautet z. B. „ReJeans <b>OHG</b>“.</p></div>
+   <div class="merke"><b>GbR oder OHG?</b> Bei der Haftung gibt es kaum einen Unterschied. Der Unterschied: Die OHG betreibt ein größeres Handelsgewerbe und <b>muss</b> ins Handelsregister.</div>`},
+  {id:'amt',ico:'🏛️',label:'Post vom Amtsgericht',x:83,y:72,html:`
+   <div class="letter"><div class="lh"><span>Amtsgericht Chemnitz · Registergericht</span><span class="stamp">EINGETRAGEN</span></div>
+   <b>Eintragung in das Handelsregister, Abteilung A</b><br><br>
+   Firma: <b>ReJeans OHG</b><br>Sitz: Chemnitz<br>Gegenstand: Herstellung und Handel mit Upcycling-Mode<br>
+   Gesellschafter: Lea Berger, Chemnitz · Tom Vogel, Chemnitz<br><br>
+   Grund der Eintragung: Das Unternehmen betreibt ein Handelsgewerbe, das nach Art und Umfang einen kaufmännischen Geschäftsbetrieb erfordert.</div>`},
+  {id:'vertrag',ico:'📜',label:'Gesellschaftsvertrag',x:47,y:28,html:`
+   <div class="letter"><div class="lh"><span>Gesellschaftsvertrag der ReJeans OHG</span><span>Seite 2</span></div>
+   <b>§ 3 Gewinnverteilung</b><br>Da Lea Berger Vollzeit und Tom Vogel Teilzeit arbeitet, wird der Gewinn wie folgt verteilt:<br>• Lea Berger: <b>60 %</b><br>• Tom Vogel: <b>40 %</b><br><br>
+   <b>§ 4 Geschäftsführung</b><br>Beide Gesellschafter sind zur Geschäftsführung berechtigt.</div>`},
+  {id:'chat',ico:'📱',label:'Gruppenchat',x:24,y:72,html:`
+   <div class="chat"><div class="chead">🎉 Die Crew (6 Mitglieder)</div>
+    <div class="bub me">Leute, wir sind jetzt eine OHG! 🥳</div>
+    <div class="bub"><b>Mia</b>Krass, dann musstet ihr ja 25.000 € Startkapital einzahlen 💸</div>
+    <div class="bub"><b>Ben</b>Wenigstens haftet Tom jetzt nur noch mit dem Geld, das er in die Firma gesteckt hat 😎</div>
+    <div class="bub"><b>Can</b>Ihr steht jetzt also im Handelsregister? Fancy 🏛️</div>
+    <div class="bub"><b>Sophie</b>Hauptsache, du darfst als Chefin auch was entscheiden, Lea 💪</div>
+    <div class="bub"><b>Paul</b>Wenn ihr Schulden habt, kann ein Lieferant also direkt bei dir klingeln, Lea, und alles von dir verlangen? 😬</div></div>`},
+  {id:'kasse',ico:'🧾',label:'Kasse',x:65,y:47,html:`
+   <div class="screenbox"><div class="mailh">🧾 Kassensystem · Jahresabschluss</div>Gewinn der ReJeans OHG im letzten Jahr:<div class="big">40.000 €</div></div>
+   <div class="flavor" style="margin-top:10px">Daneben klebt ein Post-it von Tom: „Party? 🎉“</div>`}
+ ],
+ tasks:[
+  {id:'3a',op:'Erkläre',title:'Warum OHG?',needs:['ordner','amt'],type:'choice',
+   q:'Erkläre, warum ReJeans jetzt eine OHG ist. Wähle die richtige Erklärung.',
+   options:['Weil Lea und Tom 25.000 € Startkapital eingezahlt haben.','Weil ReJeans jetzt ein größeres Handelsgewerbe betreibt und deshalb ins Handelsregister eingetragen wird.','Weil sie jetzt einen Laden statt nur eines Onlineshops haben.','Weil Tom inzwischen mehr Geld in die Firma gesteckt hat als Lea.'],correct:1,
+   wrong:{0:'Lies im Ordner nach, ob eine OHG ein Mindestkapital braucht.',2:'Der Laden allein ist nicht entscheidend. Lies den „Grund der Eintragung“ im Brief vom Amtsgericht.',3:'Wer wie viel Geld eingezahlt hat, ändert nichts an der Rechtsform.'},
+   hints:['Im Brief vom Amtsgericht steht der „Grund der Eintragung“.']},
+  {id:'3b',op:'Prüfe',title:'Fake News im Gruppenchat',needs:['chat','ordner'],type:'tf',
+   q:'Prüfe die Aussagen von Leas Freunden. Wahr oder Fake?',
+   items:[
+    {t:'Mia: „Für eine OHG muss man 25.000 € Startkapital einzahlen.“',a:false,fix:'Eine OHG braucht kein Mindestkapital. (25.000 € braucht man für eine GmbH – dazu später mehr.)'},
+    {t:'Ben: „Tom haftet in der OHG nur mit dem Geld, das er in die Firma gesteckt hat.“',a:false,fix:'Tom haftet unbeschränkt – auch mit seinem Privatvermögen.'},
+    {t:'Can: „Eine OHG muss im Handelsregister stehen.“',a:true},
+    {t:'Sophie: „Lea darf in der OHG Entscheidungen für die Firma treffen.“',a:true},
+    {t:'Paul: „Ein Lieferant kann sich direkt an Lea wenden und alle Schulden von ihr verlangen.“',a:true}],
+   hints:['Vergleiche jede Aussage mit dem Ordner von Frau Lindner – besonders mit den Absätzen über Mindestkapital und Haftung.']},
+  {id:'3e',op:'Ergänze',title:'Gründungsakte: OHG',needs:['ordner'],type:'akte',col:'OHG',
+   q:'Lies den Text und ergänze dann in der Gründungsakte die Spalte „OHG“.',
+   hints:['Alle Angaben stehen im Ordner von Frau Lindner.']}
+ ]},
+/* ---------- SZENE 4 ---------- */
+{id:'kg',nr:4,ico:'💰',title:'Die Investorin',form:'KG',room:'werkstatt',
+ main:'Finde heraus, wie Frau Kaya Geld in ReJeans stecken kann, ohne mit ihrem Haus zu haften.',
+ intro:[
+  {bg:'werkstatt',cap:'Frühjahr · Die Werkstatt hinter dem Laden',sp:'E',fx:'💥',tx:'Ein lautes Krachen. Dann Stille. Die alte Nähmaschine qualmt.'},
+  {sp:'Tom',tx:'Das war es. Die ist hinüber.'},
+  {sp:'Lea',tx:'Zwei Industrienähmaschinen kosten 30.000 €. Und die Bank hat heute Nein gesagt.'},
+  {sp:'E',fx:'🔔',tx:'Es klingelt. In der Tür steht eine Frau im Mantel: Aylin Kaya, Inhaberin eines Stoffgroßhandels.'},
+  {sp:'Kaya',tx:'Ich verfolge euch schon lange. Ich gebe euch 20.000 €.'},
+  {sp:'Kaya',tx:'Aber: Ich will nicht mitarbeiten. Und ich will auf keinen Fall mit meinem Haus haften, falls ihr Mist baut.'},
+  {sp:'Lea',fx:'☎️',tx:'Moment … ich rufe kurz Frau Lindner an. Geht so etwas überhaupt?'},
+  {sp:'Lindner',tx:'Ja. Dann werdet ihr eine KG. Ich schreibe euch alles aufs Whiteboard in der Werkstatt.'},
+  {sp:'Kaya',tx:'Bevor ich unterschreibe, will ich den schlimmsten Fall durchgerechnet sehen. Schwarz auf weiß.'},
+  {sp:'E',tx:'Du bist Lea. Überzeuge Frau Kaya – mit Fakten.'}
+ ],
+ objects:[
+  {id:'tafel',ico:'📋',label:'Whiteboard',x:74,y:30,html:`
+   <div class="rtext"><h3>📋 Die KG</h3><p><b>KG</b> steht für <b>Kommanditgesellschaft</b>. Sie braucht <b>mindestens einen Komplementär und einen Kommanditisten</b>, aber <b>kein Mindestkapital</b>.</p><p>Der <b>Komplementär</b> <b>führt die Geschäfte</b> und haftet <b>unbeschränkt</b>, auch mit seinem Privatvermögen.</p><p>Der <b>Kommanditist</b> <b>leitet nicht mit</b>, hat aber <b>Kontrollrechte</b>. Er haftet nur <b>bis zur Höhe seiner Einlage</b> – also nur mit dem Geld, das er in die Firma gesteckt hat.</p><p>Die KG <b>muss</b> ins <b>Handelsregister</b>. Der Zusatz lautet z. B. „ReJeans <b>KG</b>“.</p></div>`},
+  {id:'karte',ico:'🪪',label:'Visitenkarte',x:27,y:62,html:`
+   <div class="letter" style="text-align:center"><b style="font-size:20px">Aylin Kaya</b><br>Kaya Textil-Großhandel · Chemnitz<br>📞 0371 / 555 2010</div>
+   <div class="note" style="margin-top:12px">Auf der Rückseite, handschriftlich:<br>
+   Meine Bedingungen:<br>1. Ich gebe <b>20.000 €</b>.<br>2. Ich will <b>nicht mitarbeiten</b> – ich habe meine eigene Firma.<br>3. Ich will <b>nicht mit meinem Privatvermögen haften</b> – mein Haus bleibt meins!<br>4. Ich will aber wissen, was mit meinem Geld passiert.</div>`},
+  {id:'masch',ico:'⚙️',label:'Kaputte Nähmaschine',x:45,y:42,html:`
+   <div class="flavor">Die alte Maschine riecht verbrannt. Daneben liegt ein Angebot:</div>
+   <div class="screenbox" style="margin-top:10px"><div class="mailh">📄 Angebot · Industrie-Nähtechnik Sachsen</div>2 × Industrienähmaschine „DuraStitch 900“<div class="big">30.000 €</div></div>
+   <div class="flavor" style="margin-top:10px">Lea und Tom haben zusammen nur 10.000 € übrig. Mit Frau Kayas 20.000 € würde es genau reichen.</div>`},
+  {id:'zettel',ico:'📝',label:'Worst-Case-Zettel',x:60,y:67,html:`
+   <div class="note"><b>Was wäre, wenn …? 😨</b><br>Ein Großkunde geht pleite und bezahlt seine Rechnungen nicht.<br><br>
+   Schulden der ReJeans KG: <b>80.000 €</b><br>
+   Firmenvermögen (Maschinen, Stoffe, Konto – darin stecken auch Frau Kayas 20.000 €): <b>30.000 €</b><br><br>
+   Frau Kaya fragt: „Und was muss <u>ich</u> dann noch zahlen?“</div>`}
+ ],
+ tasks:[
+  {id:'4a',op:'Ordne zu',title:'Zwei Sorten Gesellschafter',needs:['tafel'],type:'sort',
+   q:'Ordne die Aussagen zu: Was gilt für den Komplementär, was für den Kommanditisten?',
+   buckets:['Komplementär','Kommanditist'],
+   items:[{t:'haftet unbeschränkt – auch privat',b:0},{t:'haftet nur bis zur Höhe seiner Einlage',b:1},{t:'führt die Geschäfte',b:0},{t:'leitet nicht mit, hat aber Kontrollrechte',b:1},{t:'hier: Lea und Tom',b:0},{t:'hier: Frau Kaya',b:1}],
+   hints:['Lies auf dem Whiteboard die Absätze über den Komplementär und den Kommanditisten.','Frau Kaya will nicht mitarbeiten und nicht privat haften.']},
+  {id:'4b',op:'Berechne',title:'Der Worst Case',needs:['zettel','tafel'],type:'number',
+   q:'Berechne den schlimmsten Fall für Frau Kaya.',
+   parts:[{label:'a) Wie viel Geld fehlt noch, wenn das gesamte Firmenvermögen aufgebraucht ist?',a:50000},{label:'b) Wie viel muss Frau Kaya zusätzlich aus ihrem Privatvermögen zahlen?',a:0}],
+   hints:['a) Schulden minus Firmenvermögen.','b) Frau Kayas 20.000 € stecken schon im Firmenvermögen. Bis zu welcher Höhe haftet ein Kommanditist?']},
+  {id:'4d',op:'Begründe',title:'Frau Kayas Entscheidung',needs:['karte','tafel'],type:'text',
+   q:'Begründe, warum Frau Kaya Kommanditistin werden will – und nicht einfach Gesellschafterin einer OHG.',min:50,kw:[['einlage','20.000','20000'],['haft','privat','haus']],kwMsg:'Verwende die Begriffe „Einlage“ und „Haftung“ (oder „Privatvermögen“) in deiner Begründung.',
+   hints:['Vergleiche Frau Kayas Bedingungen (Visitenkarte) mit der Haftung in der OHG und in der KG.','Denke an zwei Punkte: Haftung und Mitarbeit.']},
+  {id:'4e',op:'Ergänze',title:'Gründungsakte: KG',needs:['tafel'],type:'akte',col:'KG',
+   q:'Lies den Text und ergänze dann in der Gründungsakte die Spalte „KG“.',
+   hints:['Alle Angaben stehen auf dem Whiteboard.']}
+ ]},
+/* ---------- SZENE 5 ---------- */
+{id:'gmbh',nr:5,ico:'🛡️',title:'Die Mauer aus Kapital',form:'GmbH & UG',room:'notariat',
+ main:'Finde heraus, wie Lea und Tom mit einer GmbH ihr Privatvermögen schützen – und welche Firma Jonas mit nur 500 € gründen kann.',
+ intro:[
+  {bg:'laden',cap:'Freitagabend · 18:47 Uhr',sp:'E',fx:'📱',tx:'Lea schließt gerade den Laden ab, da klingelt ihr Handy. Eine Boutique-Kette aus Leipzig.'},
+  {sp:'Anrufer',tx:'Wir wollen 5.000 Hoodies. Exklusiv. Lieferung in vier Monaten.'},
+  {sp:'Lea',tx:'Dafür brauchen wir Personal, Stoff, Maschinen … einen Kredit über 150.000 €.'},
+  {sp:'Tom',tx:'Und wenn die Kette am Ende nicht zahlt? Dann verlieren wir alles. Unsere Ersparnisse. Dein Auto. Vielleicht sogar die Wohnung.'},
+  {sp:'Lea',tx:'Es muss doch eine Firma geben, bei der wir nicht mit unserem ganzen Leben haften …'},
+  {bg:'notariat',cap:'Zwei Wochen später · Notariat Dr. Weiß',sp:'Notar',tx:'Die gibt es. Eine GmbH – eine Gesellschaft mit beschränkter Haftung.'},
+  {sp:'Notar',tx:'Aber ohne Stammkapital geht nichts. Und der Vertrag wird hier bei mir beurkundet.'},
+  {sp:'E',tx:'Im Wartezimmer sitzt Jonas, Toms kleiner Bruder. Er will eine Fahrradwerkstatt gründen – mit genau 500 €.'},
+  {sp:'Jonas',tx:'Eine GmbH kann ich mir nie leisten … oder?'},
+  {sp:'E',tx:'Du bist Lea. Untersuche das Notariat und bereite die Gründung vor.'}
+ ],
+ objects:[
+  {id:'mappe',ico:'📘',label:'Infomappe GmbH',x:38,y:52,html:`
+   <div class="rtext"><h3>📘 Infomappe: Die GmbH</h3><p><b>GmbH</b> steht für <b>Gesellschaft mit beschränkter Haftung</b>. Gründen kann sie schon <b>eine Person</b>. Nötig ist ein <b>Stammkapital</b> von <b>mindestens 25.000 €</b>.</p><p>Geleitet wird sie von einer <b>Geschäftsführerin</b> oder einem <b>Geschäftsführer</b>.</p><p>Die GmbH haftet <b>nur mit ihrem Gesellschaftsvermögen</b>. Die Gesellschafter riskieren nur ihre <b>Einlage</b> – ihr <b>Privatvermögen ist geschützt</b>.</p><p>Der Vertrag wird beim <b>Notar</b> beurkundet, und die GmbH <b>muss</b> ins <b>Handelsregister</b>. Der Zusatz lautet z. B. „ReJeans <b>GmbH</b>“.</p></div>`},
+  {id:'gvertrag',ico:'📜',label:'Vertragsentwurf',x:54,y:68,html:`
+   <div class="letter"><div class="lh"><span>ENTWURF · Gesellschaftsvertrag</span><span>Notariat Dr. Weiß</span></div>
+   <b>ReJeans GmbH</b>, Sitz Chemnitz<br><br><b>§ 3 Stammkapital</b><br>Das Stammkapital beträgt <b>40.000 €</b>. Es übernehmen:<br>
+   • Lea Berger: 16.000 € (<b>40 %</b>)<br>• Tom Vogel: 12.000 € (<b>30 %</b>)<br>• Aylin Kaya: 12.000 € (<b>30 %</b>)<br><br>
+   <b>§ 5 Geschäftsführung</b><br>Geschäftsführerin ist Lea Berger.<br><br><b>§ 7 Gewinnverteilung</b><br>Der Gewinn wird nach Geschäftsanteilen verteilt.</div>`},
+  {id:'kredit',ico:'🏦',label:'Kreditvertrag',x:70,y:52,html:`
+   <div class="letter"><div class="lh"><span>Sparkasse · Firmenkundenbereich</span><span class="stamp">KREDIT</span></div>
+   Kreditnehmerin: <b>ReJeans GmbH</b> (nicht Frau Berger privat!)<br>Kreditbetrag: <b>150.000 €</b><br>Verwendungszweck: Großauftrag 5.000 Hoodies</div>`},
+  {id:'flyer',ico:'📄',label:'Flyer „Mini-GmbH“',x:18,y:38,html:`
+   <div class="rtext" style="border-color:#14a594"><h3 style="background:#14a594">📄 Flyer: Die UG</h3><p><b>UG</b> steht für <b>Unternehmergesellschaft (haftungsbeschränkt)</b> – die „Mini-GmbH“. Gründen kann sie <b>eine Person</b>, schon mit einem Stammkapital <b>ab 1 €</b>.</p><p>Sonst ist vieles <b>wie bei der GmbH</b>: Eine <b>Geschäftsführerin</b> oder ein <b>Geschäftsführer</b> leitet sie, und die <b>Haftung ist beschränkt</b> – das Privatvermögen ist geschützt.</p><p>Aber: Ein <b>Viertel des Jahresgewinns</b> muss zurückgelegt werden, bis 25.000 € zusammen sind.</p><p>Auch die UG braucht einen <b>Notar</b> und <b>muss</b> ins <b>Handelsregister</b>. Der Zusatz lautet z. B. „Jonas Bikes <b>UG (haftungsbeschränkt)</b>“.</p></div>`},
+  {id:'jonas',ico:'🚲',label:'Jonas',x:86,y:60,html:`
+   <div class="speech"><b>Jonas:</b><br>„Hi Lea! Ich will meine eigene Fahrradwerkstatt aufmachen: <b>Jonas Bikes</b>. 🚲<br><br>
+   Ich habe <b>500 €</b> gespart. Aber ich will auf keinen Fall mit meinem Privatkram haften, falls was schiefgeht – ich hab gesehen, wie gestresst Tom damals war. 😅<br><br>
+   Eine GmbH geht ja nicht, dafür bräuchte ich 25.000 €. Welche Firma soll ich gründen?“</div>`}
+ ],
+ tasks:[
+  {id:'5c',op:'Beurteile',title:'Was, wenn alles schiefgeht?',needs:['kredit','mappe'],type:'choice',
+   q:'Die Boutique-Kette zahlt nicht. Die ReJeans GmbH kann den Kredit über 150.000 € nicht zurückzahlen und ist pleite. Muss Lea jetzt ihr privates Auto verkaufen? Beurteile.',
+   options:['Ja – Lea haftet als Geschäftsführerin mit ihrem Privatvermögen.','Nein – die GmbH haftet nur mit ihrem Gesellschaftsvermögen. Lea verliert „nur“ ihre Einlage von 16.000 €.','Ja – aber nur die Hälfte des Autowerts.','Nein – und Lea bekommt sogar ihre 16.000 € zurück.'],correct:1,
+   wrong:{0:'Lies in der Infomappe den Absatz über die Haftung. Und wer ist laut Kreditvertrag die Kreditnehmerin?',2:'Bei der GmbH gibt es keine „halbe“ Haftung mit dem Privatvermögen.',3:'Das Geld, das Lea in die GmbH gesteckt hat, gehört zum Gesellschaftsvermögen.'},
+   tprompt:'Erkläre, was Lea im schlimmsten Fall verliert – und was nicht.',min:40,kw:[['einlage','16.000','16000'],['privat','auto','geschützt','gesellschaftsvermögen']],kwMsg:'Erkläre mit den Begriffen „Einlage“ und „Privatvermögen“, was Lea verliert und was geschützt ist.',
+   hints:['Im Kreditvertrag steht, wer die Kreditnehmerin ist.','In der Infomappe steht, was die Gesellschafter riskieren.']},
+  {id:'5d',op:'Entscheide',title:'Jonas braucht Rat',needs:['jonas','flyer'],type:'choice',
+   q:'Entscheide, welche Rechtsform Jonas für „Jonas Bikes“ wählen sollte.',
+   options:['GmbH','UG (haftungsbeschränkt)','Einzelunternehmen','KG'],correct:1,
+   wrong:{0:'Hat Jonas genug Geld für eine GmbH?',2:'Jonas will auf keinen Fall mit seinem Privatvermögen haften.',3:'Für eine KG bräuchte Jonas mindestens einen Mitgesellschafter – und einer müsste unbeschränkt haften.'},
+   tprompt:'Begründe deine Empfehlung an Jonas mit zwei Argumenten.',min:40,kw:[['1 €','1€','1 euro','ein euro','500','wenig','kapital','geld'],['haft','privat','geschützt']],kwMsg:'Nenne zwei Argumente: eins zum Startkapital und eins zur Haftung.',
+   hints:['Jonas hat zwei Wünsche: wenig Startkapital und keine private Haftung.','Lies den Flyer im Bücherregal.']},
+  {id:'5f',op:'Ergänze',title:'Gründungsakte: GmbH',needs:['mappe'],type:'akte',col:'GmbH',
+   q:'Lies den Text und ergänze dann in der Gründungsakte die Spalte „GmbH“.',
+   hints:['Alle Angaben stehen in der Infomappe.']},
+  {id:'5g',op:'Ergänze',title:'Gründungsakte: UG',needs:['flyer'],type:'akte',col:'UG',
+   q:'Lies den Text und ergänze dann in der Gründungsakte die Spalte „UG (haftungsbeschränkt)“.',
+   hints:['Alle Angaben stehen auf dem Flyer. Vieles ist wie bei der GmbH.']}
+ ]},
+/* ---------- SZENE 6 ---------- */
+{id:'ag',nr:6,ico:'📈',title:'Viele Besitzer, eine Firma',form:'AG',room:'saal',
+ main:'Finde heraus, wie eine Aktiengesellschaft funktioniert – und wer in der ReJeans AG was zu sagen hat.',
+ intro:[
+  {bg:'saal',cap:'Fünf Jahre später',sp:'E',tx:'ReJeans hat 80 Mitarbeitende und Läden in Chemnitz, Leipzig, Dresden und Berlin.'},
+  {sp:'Lea',tx:'Wir wollen nach ganz Europa. Dafür brauchen wir zwei Millionen Euro.'},
+  {sp:'Lindner',tx:'So viel leiht euch keine Bank. Aber viele Menschen könnten euch jeweils ein kleines Stück eurer Firma abkaufen.'},
+  {sp:'Tom',tx:'Du meinst … Aktien? Wir werden eine AG? So wie adidas?'},
+  {sp:'Lindner',tx:'Genau. Aber dann habt ihr nicht mehr allein das Sagen.'},
+  {cap:'Ein Jahr später · Erste Hauptversammlung der ReJeans AG',sp:'E',fx:'🎤',tx:'300 Aktionärinnen und Aktionäre sitzen im Saal. In der ersten Reihe: Leas Oma Rosi.'},
+  {sp:'Rosi',tx:'Lea, Kind! Ich habe 100 Aktien gekauft. Bekomme ich jetzt auch etwas vom Gewinn ab?'},
+  {sp:'Lea',tx:'Oma, das erkläre ich dir gleich. Aber erst muss ich selbst verstehen, wer hier eigentlich was zu sagen hat.'},
+  {sp:'E',tx:'Du bist Lea, Vorstandsvorsitzende der ReJeans AG. Untersuche den Saal.'}
+ ],
+ objects:[
+  {id:'lein',ico:'🖥️',label:'Präsentation',x:68,y:16,html:`
+   <div class="rtext"><h3>🖥️ Die AG</h3><p><b>AG</b> steht für <b>Aktiengesellschaft</b>. Ihr Kapital ist in viele <b>Aktien</b> aufgeteilt. Wer Aktien kauft, wird <b>Aktionär</b> und damit Miteigentümer. Gründen kann sie schon <b>eine Person</b>; das <b>Grundkapital</b> muss <b>mindestens 50.000 €</b> betragen.</p><p>Geleitet wird die AG vom <b>Vorstand</b> (siehe Infotafel „Die drei Organe“).</p><p>Die AG haftet <b>nur mit ihrem Gesellschaftsvermögen</b>. Aktionäre riskieren höchstens das Geld für ihre <b>Aktien</b>. Vom Gewinn bekommen sie eine <b>Dividende</b> – einen Betrag pro Aktie.</p><p>Die Satzung wird beim <b>Notar</b> beurkundet, und die AG <b>muss</b> ins <b>Handelsregister</b>. Der Zusatz lautet z. B. „ReJeans <b>AG</b>“.</p></div>`},
+  {id:'organe',ico:'🗂️',label:'Infotafel „Die drei Organe“',x:12,y:40,html:`
+   <div class="rtext" style="border-color:#7f6ad6"><h3 style="background:#7f6ad6">🗂️ Die drei Organe der AG</h3><p>In einer AG teilen sich <b>drei Organe</b> die Macht:</p><p>Der <b>Vorstand</b> <b>leitet</b> die AG im Alltag.</p><p>Der <b>Aufsichtsrat</b> <b>bestellt</b> (ernennt) den Vorstand und <b>kontrolliert</b> ihn.</p><p>Die <b>Hauptversammlung</b> ist die Versammlung <b>aller Aktionäre</b>. Sie <b>wählt</b> den Aufsichtsrat und beschließt über die <b>Dividende</b>. Jede Aktie hat eine Stimme.</p></div>
+   <div class="merke">Merkhilfe: Die Hauptversammlung wählt den Aufsichtsrat – der Aufsichtsrat bestellt und kontrolliert den Vorstand – der Vorstand leitet die AG.</div>`},
+  {id:'schild',ico:'🪧',label:'Namensschilder',x:73,y:43,html:`
+   <div class="tw"><table class="t"><tr><th>Name</th><th>Funktion</th></tr>
+   <tr><td>Lea Berger</td><td>Vorstandsvorsitzende</td></tr>
+   <tr><td>Tom Vogel</td><td>Vorstand Marketing</td></tr>
+   <tr><td>Aylin Kaya</td><td>Vorsitzende des Aufsichtsrats</td></tr>
+   <tr><td>Rosi Berger</td><td>Aktionärin (100 Aktien) – sitzt im Saal</td></tr></table></div>`},
+  {id:'depot',ico:'📃',label:'Oma Rosis Depotauszug',x:30,y:76,html:`
+   <div class="screenbox"><div class="mailh">📃 Depotauszug · Rosi Berger</div>
+   Wertpapier: ReJeans AG<br>Anzahl: <b>100 Aktien</b><br>Kaufpreis je Aktie: <b>20 €</b><br>Insgesamt bezahlt:<div class="big">2.000 €</div></div>
+   <div class="flavor" style="margin-top:10px">Oma Rosi hat mit Kuli „Für Lea ❤️“ an den Rand geschrieben.</div>`},
+  {id:'tages',ico:'📋',label:'Tagesordnung',x:58,y:76,html:`
+   <div class="letter"><div class="lh"><span>ReJeans AG · 1. ordentliche Hauptversammlung</span><span>Chemnitz</span></div>
+   <b>Tagesordnung</b><br>
+   TOP 1: Bericht des Vorstands über das Geschäftsjahr<br>
+   TOP 2: Beschluss über die Verwendung des Gewinns: Ausschüttung einer <b>Dividende von 0,50 € je Aktie</b><br>
+   TOP 3: Wahl der Mitglieder des Aufsichtsrats<br>
+   TOP 4: Entlastung des Vorstands</div>`}
+ ],
+ tasks:[
+  {id:'6a',op:'Ordne zu',title:'Wer hat was zu sagen?',needs:['organe','schild'],type:'sort',
+   q:'Ordne die Aussagen dem richtigen Organ der AG zu.',
+   buckets:['👔 Vorstand','🔍 Aufsichtsrat','🙋 Hauptversammlung'],
+   items:[{t:'leitet die AG im Alltag',b:0},{t:'Lea und Tom',b:0},{t:'kontrolliert den Vorstand',b:1},{t:'bestellt (ernennt) den Vorstand',b:1},{t:'Frau Kaya als Vorsitzende',b:1},{t:'Versammlung aller Aktionäre',b:2},{t:'beschließt über die Dividende',b:2},{t:'hier stimmt Oma Rosi ab',b:2}],
+   hints:['Infotafel „Die drei Organe“ und Namensschilder helfen dir.']},
+  {id:'6b',op:'Berechne',title:'Omas Dividende',needs:['depot','tages'],type:'number',
+   q:'Berechne, wie viel Dividende Oma Rosi für ihre Aktien bekommt.',
+   parts:[{label:'Dividende für Oma Rosi:',a:50}],
+   hints:['Anzahl der Aktien · Dividende je Aktie']},
+  {id:'6c',op:'Beurteile',title:'Omas Risiko',needs:['depot','lein'],type:'choice',
+   q:'Angenommen, die ReJeans AG geht pleite. Beurteile: Was verliert Oma Rosi höchstens?',
+   options:['50 € – ihre Dividende','2.000 € – das Geld, das sie für ihre Aktien bezahlt hat','Ihr Haus – Aktionäre haften unbeschränkt','Nichts – Aktien sind immer sicher'],correct:1,
+   wrong:{0:'Die Dividende ist ihr Gewinnanteil, nicht ihr Risiko.',2:'Lies auf der Präsentation nach, was Aktionäre riskieren.',3:'Wenn die Firma pleite ist, sind ihre Aktien nichts mehr wert.'},
+   hints:['Lies auf der Präsentation den Absatz über die Haftung.']},
+  {id:'6f',op:'Ergänze',title:'Gründungsakte: AG',needs:['lein'],type:'akte',col:'AG',
+   q:'Lies den Text und ergänze dann in der Gründungsakte die Spalte „AG“.',
+   hints:['Alle Angaben stehen auf der Präsentation.']}
+ ]}
+];
+
+const FINAL_INTRO=[
+ {bg:'saal',cap:'Nach der Hauptversammlung',sp:'E',tx:'Der Saal ist leer. Lea sitzt auf der Bühne und blättert durch ihre Gründungsakte.'},
+ {sp:'Lea',tx:'Vom WG-Zimmer bis zur AG. Einzelunternehmen, GbR, OHG, KG, GmbH, AG … jedes Mal eine neue Form.'},
+ {sp:'Lea',tx:'Und immer dieselbe Frage: Wer zahlt, wenn es schiefgeht?'},
+ {sp:'Tom',tx:'Und du hast sie jedes Mal beantwortet.'},
+ {cap:'In derselben Nacht',sp:'E',fx:'🚨',tx:'Jemand bricht in das Büro der ReJeans AG ein. Am nächsten Morgen ist die Gründungsakte verschwunden – und der Firmentresor ist mit einem Code verriegelt.'},
+ {sp:'Lea',tx:'Ohne die Akte ist alles verloren. Wir müssen den Code knacken – mit allem, was wir wissen.'},
+ {sp:'E',tx:'Fortsetzung folgt … in der nächsten Stunde: ESCAPE ROOM.'},
+ {sp:'E',fx:'💸',tx:'Doch vorher ist Kassensturz: Wie viel Geld hast du auf deinem Weg verdient? Vielleicht reicht es für deine eigene Firma …'}
+];
+
+/* ===================== RÄUME (SVG) ===================== */
+const SV='<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">';
+const ROOMS={
+zimmer:()=>SV+`
+<rect width="1000" height="600" fill="#2b3060"/>
+<rect y="450" width="1000" height="150" fill="#5b4232"/><rect y="444" width="1000" height="10" fill="#433022"/>
+<circle cx="300" cy="300" r="190" fill="#ffd27a" opacity=".13"/>
+<rect x="600" y="55" width="290" height="220" rx="6" fill="#0d1330" stroke="#cdbb9f" stroke-width="10"/>
+<circle cx="835" cy="110" r="24" fill="#f6e9b0"/>
+<rect x="610" y="175" width="60" height="95" fill="#1a234f"/><rect x="678" y="140" width="52" height="130" fill="#1e2858"/><rect x="738" y="195" width="70" height="75" fill="#1a234f"/><rect x="814" y="160" width="66" height="110" fill="#1e2858"/>
+<g fill="#ffd76a"><rect x="620" y="190" width="8" height="8"/><rect x="645" y="215" width="8" height="8"/><rect x="690" y="160" width="8" height="8"/><rect x="705" y="200" width="8" height="8"/><rect x="760" y="215" width="8" height="8"/><rect x="830" y="180" width="8" height="8"/><rect x="850" y="230" width="8" height="8"/></g>
+<line x1="745" y1="55" x2="745" y2="275" stroke="#cdbb9f" stroke-width="6"/>
+<rect x="60" y="145" width="270" height="10" fill="#8a6a4d"/>
+<g><rect x="80" y="95" width="16" height="50" fill="#e8574a"/><rect x="98" y="102" width="14" height="43" fill="#3dd6c6"/><rect x="114" y="90" width="18" height="55" fill="#f5b942"/><rect x="134" y="105" width="12" height="40" fill="#8e6cc2"/><rect x="240" y="110" width="60" height="35" rx="4" fill="#ffb3c7"/></g>
+<rect x="390" y="70" width="140" height="180" rx="4" fill="#ff6b4a"/>
+<text x="460" y="150" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="30" fill="#fff">FAIR</text>
+<text x="460" y="185" text-anchor="middle" font-family="Arial" font-weight="700" font-size="20" fill="#fff">FASHION</text>
+<line x1="420" y1="210" x2="500" y2="210" stroke="#fff" stroke-width="3" stroke-dasharray="8 6"/>
+<circle cx="568" cy="175" r="6" fill="#ccc"/><line x1="568" y1="181" x2="568" y2="205" stroke="#d9c27a" stroke-width="4"/>
+<rect x="50" y="340" width="440" height="18" fill="#9a7553"/><rect x="70" y="358" width="14" height="100" fill="#7d5c40"/><rect x="456" y="358" width="14" height="100" fill="#7d5c40"/>
+<rect x="80" y="310" width="120" height="30" rx="6" fill="#ece6da"/><path d="M95 310 V270 H185 V295 H170 V285 H110 V310 Z" fill="#ece6da"/><circle cx="185" cy="300" r="10" fill="#c9c2b4"/>
+<rect x="232" y="268" width="112" height="70" rx="4" fill="#2d3550"/><rect x="240" y="275" width="96" height="56" fill="#6fa8ff"/><rect x="222" y="336" width="132" height="6" rx="2" fill="#c9cfdb"/>
+<rect x="395" y="328" width="62" height="12" fill="#fff" transform="rotate(-6 426 334)"/>
+<path d="M430 340 L450 250 L480 250" stroke="#ddd" stroke-width="5" fill="none"/><path d="M465 235 h40 l-10 22 h-20 z" fill="#ffd27a"/>
+<rect x="600" y="400" width="370" height="70" fill="#6a4a8c"/><rect x="600" y="380" width="370" height="30" fill="#efe8f8"/><rect x="690" y="370" width="280" height="52" rx="12" fill="#8e6cc2"/><ellipse cx="645" cy="378" rx="36" ry="16" fill="#fff"/>
+<ellipse cx="330" cy="525" rx="170" ry="38" fill="#3a2e55" opacity=".7"/>
+<ellipse cx="530" cy="525" rx="70" ry="20" fill="#3c6db8"/><ellipse cx="510" cy="510" rx="50" ry="16" fill="#2f5a9c"/><ellipse cx="555" cy="500" rx="38" ry="12" fill="#4a7fcc"/>
+</svg>`,
+cafe:()=>SV+`
+<rect width="1000" height="600" fill="#ead6b6"/>
+<rect y="300" width="1000" height="160" fill="#c49a6a"/><rect y="455" width="1000" height="145" fill="#6e4630"/>
+<rect x="50" y="60" width="350" height="230" fill="#bfe2f0" stroke="#fff" stroke-width="12"/>
+<rect x="62" y="150" width="90" height="128" fill="#d9cfc0"/><rect x="160" y="120" width="110" height="158" fill="#cfc2ae"/><rect x="278" y="160" width="110" height="118" fill="#d9cfc0"/>
+<g fill="#9fc6dd"><rect x="80" y="170" width="20" height="24"/><rect x="115" y="170" width="20" height="24"/><rect x="180" y="140" width="22" height="26"/><rect x="225" y="140" width="22" height="26"/><rect x="300" y="180" width="22" height="24"/><rect x="345" y="180" width="22" height="24"/></g>
+<line x1="225" y1="60" x2="225" y2="290" stroke="#fff" stroke-width="8"/>
+<rect x="440" y="80" width="140" height="180" rx="6" fill="#263238" stroke="#8a6040" stroke-width="8"/>
+<text x="510" y="122" text-anchor="middle" font-family="Chalkboard SE,Comic Sans MS,cursive" font-size="20" fill="#fff">Karte</text>
+<text x="510" y="160" text-anchor="middle" font-family="Chalkboard SE,Comic Sans MS,cursive" font-size="15" fill="#f5e7b0">Cappuccino 3,40</text>
+<text x="510" y="190" text-anchor="middle" font-family="Chalkboard SE,Comic Sans MS,cursive" font-size="15" fill="#f5e7b0">Latte 3,80</text>
+<text x="510" y="220" text-anchor="middle" font-family="Chalkboard SE,Comic Sans MS,cursive" font-size="15" fill="#f5e7b0">Kuchen 3,20</text>
+<rect x="640" y="125" width="330" height="8" fill="#8a6040"/>
+<g fill="#fff"><rect x="660" y="100" width="22" height="25" rx="3"/><rect x="695" y="100" width="22" height="25" rx="3"/><rect x="730" y="100" width="22" height="25" rx="3"/><rect x="870" y="95" width="40" height="30" rx="4" fill="#3dd6c6"/></g>
+<rect x="620" y="315" width="380" height="145" fill="#5a3a28"/><rect x="610" y="303" width="390" height="16" fill="#d7b48a"/>
+<rect x="700" y="225" width="110" height="78" rx="8" fill="#b9c0c8"/><rect x="725" y="275" width="20" height="28" fill="#444"/><circle cx="785" cy="250" r="10" fill="#e8574a"/>
+<line x1="560" y1="0" x2="560" y2="40" stroke="#333" stroke-width="2"/><path d="M530 40 h60 l-12 25 h-36 z" fill="#2e3148"/><circle cx="560" cy="70" r="8" fill="#ffe08a"/>
+<line x1="880" y1="0" x2="880" y2="40" stroke="#333" stroke-width="2"/><path d="M850 40 h60 l-12 25 h-36 z" fill="#2e3148"/><circle cx="880" cy="70" r="8" fill="#ffe08a"/>
+<ellipse cx="330" cy="430" rx="140" ry="24" fill="#8a5a3c"/><rect x="320" y="440" width="20" height="110" fill="#5a3a28"/><ellipse cx="330" cy="555" rx="60" ry="10" fill="#4a2e20"/>
+<rect x="150" y="410" width="50" height="90" rx="8" fill="#3a6e8c"/><rect x="460" y="410" width="50" height="90" rx="8" fill="#3a6e8c"/>
+<rect x="300" y="418" width="34" height="18" fill="#fff"/>
+</svg>`,
+laden:()=>SV+`
+<rect width="1000" height="600" fill="#f4eee4"/><rect y="460" width="1000" height="140" fill="#cdb79a"/><rect y="455" width="1000" height="8" fill="#b39c7f"/>
+<text x="560" y="100" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="64" fill="#ff6b4a">Re<tspan fill="#2e3148">Jeans</tspan></text>
+<line x1="380" y1="118" x2="740" y2="118" stroke="#ff6b4a" stroke-width="3" stroke-dasharray="10 7"/>
+<rect x="770" y="140" width="200" height="300" fill="#cfe9f5" stroke="#2e3148" stroke-width="10"/>
+<rect x="780" y="380" width="180" height="50" fill="#e9f5fb"/><line x1="870" y1="140" x2="870" y2="440" stroke="#2e3148" stroke-width="5"/>
+<rect x="820" y="420" width="110" height="20" rx="3" fill="#2e3148"/>
+<line x1="60" y1="190" x2="420" y2="190" stroke="#555" stroke-width="6"/><rect x="70" y="190" width="8" height="270" fill="#555"/><rect x="402" y="190" width="8" height="270" fill="#555"/>
+<g><path d="M95 205 h50 l20 30 l-14 10 l-8 -10 v80 h-46 v-80 l-8 10 l-14 -10 z" fill="#3c6db8"/><path d="M175 205 h50 l20 30 l-14 10 l-8 -10 v80 h-46 v-80 l-8 10 l-14 -10 z" fill="#ff6b4a"/><path d="M255 205 h50 l20 30 l-14 10 l-8 -10 v80 h-46 v-80 l-8 10 l-14 -10 z" fill="#3dd6c6"/><path d="M335 205 h50 l20 30 l-14 10 l-8 -10 v80 h-46 v-80 l-8 10 l-14 -10 z" fill="#f5b942"/></g>
+<rect x="460" y="330" width="280" height="130" fill="#2e3148"/><rect x="450" y="318" width="300" height="16" fill="#4b4f72"/>
+<rect x="610" y="270" width="80" height="50" rx="5" fill="#d9dde8"/><rect x="620" y="278" width="60" height="26" fill="#6fa8ff"/>
+<rect x="470" y="290" width="70" height="30" rx="3" fill="#f5b942"/>
+<rect x="430" y="150" width="70" height="80" fill="#fff" stroke="#c9b38f" stroke-width="5"/><line x1="445" y1="175" x2="485" y2="175" stroke="#bbb" stroke-width="3"/><line x1="445" y1="190" x2="485" y2="190" stroke="#bbb" stroke-width="3"/><line x1="445" y1="205" x2="475" y2="205" stroke="#bbb" stroke-width="3"/>
+<rect x="190" y="410" width="80" height="50" rx="6" fill="#8a6a4d"/>
+<circle cx="740" cy="420" r="30" fill="#4f8a1c"/><rect x="725" y="430" width="30" height="35" fill="#a0704c"/>
+</svg>`,
+werkstatt:()=>SV+`
+<rect width="1000" height="600" fill="#8f989e"/><rect y="460" width="1000" height="140" fill="#545a5f"/><rect y="455" width="1000" height="8" fill="#3e4347"/>
+<g stroke="#7f878c" stroke-width="2"><line x1="0" y1="120" x2="1000" y2="120"/><line x1="0" y1="240" x2="1000" y2="240"/><line x1="0" y1="360" x2="1000" y2="360"/></g>
+<rect x="580" y="70" width="320" height="200" rx="4" fill="#fff" stroke="#b9bfc4" stroke-width="8"/>
+<text x="740" y="110" text-anchor="middle" font-family="Chalkboard SE,Comic Sans MS,cursive" font-size="28" fill="#c0392b">KG = ?</text>
+<line x1="610" y1="140" x2="730" y2="140" stroke="#2e6fd6" stroke-width="4"/><line x1="610" y1="170" x2="700" y2="170" stroke="#2e6fd6" stroke-width="4"/><line x1="760" y1="140" x2="870" y2="140" stroke="#2a9d63" stroke-width="4"/><line x1="760" y1="170" x2="850" y2="170" stroke="#2a9d63" stroke-width="4"/><line x1="740" y1="130" x2="740" y2="250" stroke="#333" stroke-width="3"/>
+<rect x="30" y="80" width="210" height="10" fill="#6b5844"/><rect x="30" y="200" width="210" height="10" fill="#6b5844"/><rect x="30" y="320" width="210" height="10" fill="#6b5844"/>
+<g><circle cx="65" cy="58" r="22" fill="#3c6db8"/><circle cx="115" cy="58" r="22" fill="#ff6b4a"/><circle cx="165" cy="58" r="22" fill="#f5b942"/><circle cx="215" cy="58" r="22" fill="#3dd6c6"/>
+<circle cx="65" cy="178" r="22" fill="#8e6cc2"/><circle cx="115" cy="178" r="22" fill="#2f5a9c"/><circle cx="165" cy="178" r="22" fill="#e8574a"/>
+<circle cx="65" cy="298" r="22" fill="#4a7fcc"/><circle cx="115" cy="298" r="22" fill="#d9c9a8"/></g>
+<rect x="270" y="350" width="330" height="20" fill="#a07a55"/><rect x="285" y="370" width="16" height="90" fill="#7d5c40"/><rect x="570" y="370" width="16" height="90" fill="#7d5c40"/>
+<rect x="380" y="310" width="140" height="40" rx="6" fill="#ece6da"/><path d="M395 310 V255 H505 V285 H485 V272 H415 V310 Z" fill="#d9d2c4"/>
+<circle cx="420" cy="230" r="18" fill="#666" opacity=".55"/><circle cx="445" cy="200" r="24" fill="#777" opacity=".45"/><circle cx="470" cy="165" r="30" fill="#888" opacity=".35"/>
+<rect x="930" y="250" width="70" height="210" fill="#5b4636"/><circle cx="945" cy="360" r="5" fill="#d9c27a"/>
+<rect x="320" y="460" width="120" height="60" rx="4" fill="#3e4347" opacity=".6"/>
+</svg>`,
+notariat:()=>SV+`
+<rect width="1000" height="600" fill="#4b3a2d"/>
+<g stroke="#5a4637" stroke-width="3"><line x1="330" y1="0" x2="330" y2="460"/><line x1="440" y1="0" x2="440" y2="460"/><line x1="550" y1="0" x2="550" y2="460"/><line x1="660" y1="0" x2="660" y2="460"/></g>
+<rect y="460" width="1000" height="140" fill="#2b2119"/><rect y="455" width="1000" height="8" fill="#1f1812"/>
+<rect x="30" y="50" width="260" height="410" fill="#3a2a1e"/>
+<g><rect x="30" y="150" width="260" height="10" fill="#5c4330"/><rect x="30" y="260" width="260" height="10" fill="#5c4330"/><rect x="30" y="370" width="260" height="10" fill="#5c4330"/></g>
+<g><rect x="45" y="80" width="18" height="70" fill="#8a2c2c"/><rect x="65" y="90" width="16" height="60" fill="#2c4a8a"/><rect x="83" y="75" width="20" height="75" fill="#2c6e4a"/><rect x="105" y="88" width="14" height="62" fill="#8a6a2c"/><rect x="160" y="85" width="18" height="65" fill="#5c2c8a"/><rect x="180" y="80" width="18" height="70" fill="#8a2c2c"/>
+<rect x="45" y="195" width="20" height="65" fill="#2c4a8a"/><rect x="67" y="200" width="16" height="60" fill="#8a6a2c"/><rect x="200" y="190" width="20" height="70" fill="#2c6e4a"/><rect x="222" y="200" width="16" height="60" fill="#8a2c2c"/>
+<rect x="45" y="305" width="18" height="65" fill="#5c2c8a"/><rect x="65" y="310" width="20" height="60" fill="#2c6e4a"/><rect x="87" y="300" width="16" height="70" fill="#8a2c2c"/><rect x="230" y="305" width="18" height="65" fill="#2c4a8a"/></g>
+<rect x="425" y="70" width="150" height="110" fill="#f6efd8" stroke="#c9a23a" stroke-width="10"/><text x="500" y="118" text-anchor="middle" font-family="Georgia,serif" font-size="16" fill="#5a4637">NOTAR</text><text x="500" y="142" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#5a4637">Dr. M. Weiß</text>
+<rect x="745" y="70" width="200" height="200" fill="#c8d6e0" stroke="#2b2119" stroke-width="8"/>
+<g stroke="#9fb0bd" stroke-width="5"><line x1="750" y1="95" x2="940" y2="95"/><line x1="750" y1="120" x2="940" y2="120"/><line x1="750" y1="145" x2="940" y2="145"/><line x1="750" y1="170" x2="940" y2="170"/></g>
+<rect x="340" y="345" width="400" height="20" fill="#7d573d"/><rect x="350" y="365" width="380" height="95" fill="#6b4a33"/>
+<path d="M640 300 h36 l-6 -26 h-24 z" fill="#2a8a4a"/><rect x="655" y="300" width="6" height="45" fill="#c9a23a"/><circle cx="658" cy="300" r="40" fill="#ffe08a" opacity=".15"/>
+<rect x="390" y="330" width="70" height="15" fill="#fff"/><rect x="520" y="332" width="60" height="13" fill="#f5e7c8"/>
+<rect x="770" y="380" width="210" height="25" rx="6" fill="#7a5a44"/><rect x="780" y="405" width="12" height="55" fill="#5a4637"/><rect x="958" y="405" width="12" height="55" fill="#5a4637"/>
+<circle cx="860" cy="330" r="22" fill="#c98f63"/><rect x="835" y="352" width="50" height="40" rx="10" fill="#4f8a1c"/>
+</svg>`,
+saal:()=>SV+`
+<rect width="1000" height="600" fill="#191b33"/>
+<polygon points="0,0 120,0 420,600 200,600" fill="#fff" opacity=".05"/><polygon points="1000,0 880,0 580,600 800,600" fill="#fff" opacity=".05"/>
+<rect x="260" y="40" width="480" height="210" rx="6" fill="#e9eefc"/>
+<text x="500" y="110" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="44" fill="#ff6b4a">ReJeans <tspan fill="#2e3148">AG</tspan></text>
+<text x="500" y="150" text-anchor="middle" font-family="Arial" font-size="20" fill="#2e3148">1. Hauptversammlung</text>
+<polyline points="320,225 400,200 470,210 560,170 680,130" fill="none" stroke="#2a9d63" stroke-width="6"/>
+<rect x="80" y="280" width="840" height="50" fill="#2c2f55"/><rect x="80" y="276" width="840" height="8" fill="#4b4f82"/>
+<rect x="140" y="215" width="60" height="65" fill="#3a3d6b"/><rect x="132" y="208" width="76" height="10" fill="#4b4f82"/>
+<rect x="580" y="240" width="300" height="40" fill="#3a3d6b"/>
+<g fill="#fff"><rect x="600" y="248" width="60" height="16" rx="2"/><rect x="700" y="248" width="60" height="16" rx="2"/><rect x="800" y="248" width="60" height="16" rx="2"/></g>
+<g fill="#33365f">
+<rect x="60" y="370" width="880" height="34" rx="10"/><rect x="40" y="430" width="920" height="36" rx="10"/><rect x="20" y="495" width="960" height="38" rx="10"/><rect x="0" y="562" width="1000" height="40" rx="10"/></g>
+<g fill="#5a5d8f"><circle cx="120" cy="360" r="14"/><circle cx="220" cy="360" r="14"/><circle cx="380" cy="360" r="14"/><circle cx="520" cy="360" r="14"/><circle cx="700" cy="360" r="14"/><circle cx="860" cy="360" r="14"/>
+<circle cx="90" cy="420" r="15"/><circle cx="300" cy="420" r="15"/><circle cx="450" cy="420" r="15"/><circle cx="640" cy="420" r="15"/><circle cx="800" cy="420" r="15"/><circle cx="910" cy="420" r="15"/>
+<circle cx="160" cy="484" r="16"/><circle cx="410" cy="484" r="16"/><circle cx="700" cy="484" r="16"/><circle cx="880" cy="484" r="16"/></g>
+<circle cx="300" cy="360" r="14" fill="#c2477a"/>
+</svg>`
+};
+
+/* ===================== ZUSTAND ===================== */
+const KEY='rejeans-lernpfad-v3';
+const REWARD=2500,BONUS=3000,ERR=500,HINT=200;
+function freshState(){return {v:3,name:'',read:{},solved:{},ans:{},akte:{},seen:{},chosen:{},cool:{},hints:{},money:0,err:0,hintsUsed:0,serr:{},searn:{},start:Date.now(),sound:true,company:null}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.v===3)return s}catch(e){}return freshState()}
+let S=load();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const $=s=>document.querySelector(s);
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function fmt(n){return Number(n).toLocaleString('de-DE')}
+function eur(n){return (n<0?'−':'')+Math.abs(n).toLocaleString('de-DE')+' €'}
+function parseNum(s){s=String(s).replace(/[€\s]/g,'');if(/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(s))s=s.replace(/\./g,'');s=s.replace(',','.');return s===''?NaN:Number(s)}
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function range(n){return [...Array(n).keys()]}
+function show(id){
+ document.querySelectorAll('.screen').forEach(e=>e.classList.toggle('active',e.id===id));window.scrollTo(0,0);
+ if(id==='room')musicStart('calm');else if(id!=='cut')musicStop();
+ updWallet();
+}
+function toast(t,neg){const e=$('#toast');e.textContent=t;e.classList.toggle('neg',!!neg);e.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>e.classList.remove('on'),2200)}
+function updWallet(bump){document.querySelectorAll('.wallet').forEach(w=>{w.textContent='💰 '+eur(S.money);w.classList.toggle('neg',S.money<0);if(bump){w.classList.remove('bump');void w.offsetWidth;w.classList.add('bump')}})}
+function money(delta,sid){S.money+=delta;if(sid)S.searn[sid]=(S.searn[sid]||0)+delta;save();updWallet(true)}
+function sceneDone(i){return SCENES[i].tasks.every(t=>S.solved[t.id])}
+function unlocked(i){return i===0||sceneDone(i-1)}
+function allDone(){return SCENES.every((s,i)=>sceneDone(i))}
+
+/* ===================== AUDIO (Musik, Tippen, Effekte) ===================== */
+const AU={ctx:null,master:null,music:null,bus:null,sfx:null,noise:null,timer:null,next:0,bar:0,mood:'calm',playing:false,stopT:null};
+const mf=m=>440*Math.pow(2,(m-69)/12);
+function auInit(){
+ if(AU.ctx)return true;
+ const C=window.AudioContext||window.webkitAudioContext;if(!C)return false;
+ try{if(navigator.audioSession)navigator.audioSession.type='playback'}catch(e){}
+ try{
+ const a=AU.ctx=new C();
+ AU.master=a.createGain();AU.master.gain.value=S.sound?1:0;AU.master.connect(a.destination);
+ AU.music=a.createGain();AU.music.gain.value=0;AU.music.connect(AU.master);
+ AU.bus=a.createGain();AU.bus.connect(AU.music);
+ const d=a.createDelay(1.5);d.delayTime.value=.44;const fb=a.createGain();fb.gain.value=.33;const lp=a.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1600;
+ AU.bus.connect(d);d.connect(lp);lp.connect(fb);fb.connect(d);lp.connect(AU.music);
+ AU.sfx=a.createGain();AU.sfx.gain.value=.5;AU.sfx.connect(AU.master);
+ const b=a.createBuffer(1,a.sampleRate,a.sampleRate),ch=b.getChannelData(0);for(let i=0;i<ch.length;i++)ch[i]=Math.random()*2-1;AU.noise=b;
+ }catch(e){AU.ctx=null;return false}
+ return true;
+}
+function auWake(){if(auInit()&&AU.ctx.state!=='running'){try{AU.ctx.resume()}catch(e){}}}
+document.addEventListener('pointerdown',auWake,{passive:true});
+document.addEventListener('touchend',auWake,{passive:true});
+const PROG={calm:[[57,60,64,67,45],[53,57,60,64,41],[48,55,60,64,36],[55,59,62,67,43]],tense:[[50,53,57,62,38],[46,50,53,58,34],[43,46,50,55,43],[45,49,52,57,33]]};
+const BAR=60/64*4;
+const ARP=[[1,0,0,1,0,0,1,0],[0,0,1,0,0,1,0,0],[1,0,0,0,1,0,0,1],[0,1,0,0,1,0,0,0]];
+function musicStart(mood){
+ if(!auInit())return;AU.mood=mood||'calm';
+ const a=AU.ctx,t=a.currentTime;clearTimeout(AU.stopT);
+ AU.music.gain.cancelScheduledValues(t);AU.music.gain.setValueAtTime(AU.music.gain.value,t);AU.music.gain.linearRampToValueAtTime(.55,t+2.5);
+ if(AU.playing)return;
+ AU.playing=true;AU.next=t+.15;AU.bar=0;clearInterval(AU.timer);AU.timer=setInterval(sched,250);sched();
+}
+function musicStop(){
+ if(!AU.ctx||!AU.playing)return;
+ const a=AU.ctx,t=a.currentTime;
+ AU.music.gain.cancelScheduledValues(t);AU.music.gain.setValueAtTime(AU.music.gain.value,t);AU.music.gain.linearRampToValueAtTime(0,t+1.5);
+ clearTimeout(AU.stopT);AU.stopT=setTimeout(()=>{clearInterval(AU.timer);AU.playing=false},1700);
+}
+function sched(){
+ const a=AU.ctx;if(!a||a.state!=='running')return;
+ if(AU.next<a.currentTime)AU.next=a.currentTime+.05;
+ while(AU.next<a.currentTime+1.5){playBar(AU.next,AU.bar);AU.next+=BAR;AU.bar++}
+}
+function playBar(t,n){
+ const a=AU.ctx,ch=PROG[AU.mood][n%4];
+ const pf=a.createBiquadFilter();pf.type='lowpass';pf.frequency.value=AU.mood==='tense'?650:950;
+ const pg=a.createGain();pg.gain.setValueAtTime(0,t);pg.gain.linearRampToValueAtTime(.045,t+1.4);pg.gain.setValueAtTime(.045,t+BAR-.6);pg.gain.linearRampToValueAtTime(0,t+BAR+.9);
+ pf.connect(pg);pg.connect(AU.music);
+ ch.slice(0,4).forEach(m=>[['triangle',0],['sine',7],['sine',-7]].forEach(([ty,dt])=>{const o=a.createOscillator();o.type=ty;o.frequency.value=mf(m);o.detune.value=dt;o.connect(pf);o.start(t);o.stop(t+BAR+1)}));
+ const bo=a.createOscillator();bo.type='sine';bo.frequency.value=mf(ch[4]);const bg=a.createGain();
+ bg.gain.setValueAtTime(0,t);bg.gain.linearRampToValueAtTime(.1,t+.08);bg.gain.exponentialRampToValueAtTime(.03,t+BAR*.9);bg.gain.linearRampToValueAtTime(0,t+BAR+.2);
+ bo.connect(bg);bg.connect(AU.music);bo.start(t);bo.stop(t+BAR+.3);
+ const pat=ARP[n%4],tones=ch.slice(0,4).map(m=>m+12);
+ pat.forEach((on,k)=>{if(!on||(AU.mood==='tense'&&k%2))return;const tt=t+k*BAR/8,m=tones[(k+n)%4];const o=a.createOscillator();o.type='sine';o.frequency.value=mf(m);const g=a.createGain();
+  g.gain.setValueAtTime(0,tt);g.gain.linearRampToValueAtTime(.04,tt+.01);g.gain.exponentialRampToValueAtTime(.0008,tt+1.1);o.connect(g);g.connect(AU.bus);o.start(tt);o.stop(tt+1.2)});
+}
+function okA(){return AU.ctx&&S.sound&&AU.ctx.state==='running'}
+function env(g,t,peak,att,dec){g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+att);g.gain.exponentialRampToValueAtTime(.0001,t+att+dec)}
+function nHit(t,type,fr,q,peak,dec,fr2){const a=AU.ctx,s=a.createBufferSource();s.buffer=AU.noise;const f=a.createBiquadFilter();f.type=type;f.frequency.setValueAtTime(fr,t);if(fr2)f.frequency.exponentialRampToValueAtTime(fr2,t+dec);f.Q.value=q;const g=a.createGain();env(g,t,peak,.004,dec);s.connect(f);f.connect(g);g.connect(AU.sfx);s.start(t,Math.random()*.5,dec+.1)}
+function tone(t,fr,type,peak,dec,fr2,att){const a=AU.ctx,o=a.createOscillator();o.type=type;o.frequency.setValueAtTime(fr,t);if(fr2)o.frequency.exponentialRampToValueAtTime(fr2,t+dec);const g=a.createGain();env(g,t,peak,att||.006,dec);o.connect(g);g.connect(AU.sfx);o.start(t);o.stop(t+(att||.006)+dec+.05)}
+function sfxKey(){if(!okA())return;const t=AU.ctx.currentTime;nHit(t,'bandpass',1700+Math.random()*2500,1.3,.2+Math.random()*.12,.025+Math.random()*.02);tone(t,140+Math.random()*60,'sine',.05,.035,70)}
+function sfxWhoosh(){if(!okA())return;nHit(AU.ctx.currentTime,'bandpass',300,.9,.06,.4,2400)}
+function sfxFx(e){
+ if(!okA())return;const t=AU.ctx.currentTime;
+ if(e==='📱'){for(let i=0;i<3;i++)tone(t+i*.28,160,'triangle',.07,.18)}
+ else if(e==='🔔'){tone(t,1318,'sine',.1,1.3);tone(t,1975,'sine',.05,.9);tone(t+.38,1046,'sine',.1,1.6)}
+ else if(e==='💥'){nHit(t,'lowpass',900,.7,.45,1.1);tone(t,95,'sine',.3,.5,35)}
+ else if(e==='🚨'){for(let i=0;i<2;i++){tone(t+i*.8,620,'sine',.07,.4,900,.02);tone(t+i*.8+.4,900,'sine',.07,.4,620,.02)}}
+ else if(e==='☎️'){for(let i=0;i<2;i++){tone(t+i*.5,440,'sine',.06,.35);tone(t+i*.5,480,'sine',.06,.35)}}
+ else if(e==='💸'){tone(t,1568,'sine',.07,.15);tone(t+.08,2093,'sine',.07,.25)}
+ else if(e==='🤝'){nHit(t,'bandpass',900,1.5,.18,.12)}
+ else if(e==='🎤'){tone(t,110,'sine',.2,.12);tone(t+.25,110,'sine',.2,.12)}
+ else{tone(t,660,'sine',.07,.25,990)}
+}
+function sfxGood(){if(!okA())return;const t=AU.ctx.currentTime;[72,76,79].forEach((m,i)=>tone(t+i*.08,mf(m),'sine',.08,.35))}
+function sfxBad(){if(!okA())return;const t=AU.ctx.currentTime;tone(t,mf(52),'triangle',.08,.35);tone(t+.15,mf(48),'triangle',.08,.45)}
+function sfxCoin(){if(!okA())return;const t=AU.ctx.currentTime;tone(t,mf(88),'square',.03,.08);tone(t+.07,mf(93),'square',.03,.25)}
+function sfxFanfare(){if(!okA())return;const t=AU.ctx.currentTime;[60,64,67,72,76,79,84].forEach((m,i)=>tone(t+i*.09,mf(m),'triangle',.07,.5))}
+function setSound(on){S.sound=on;save();if(AU.master)AU.master.gain.value=on?1:0;updSoundBtns()}
+function updSoundBtns(){['#cutSound','#roomSound'].forEach(s=>{const e=$(s);if(e)e.textContent=S.sound?'🎵 Musik an':'🔇 Musik aus'})}
+
+/* ===================== START & MENÜ ===================== */
+const nameIn=$('#nameIn');
+nameIn.value=S.name||'';
+function upd(){$('#startBtn').disabled=nameIn.value.trim().length<2}
+nameIn.addEventListener('input',upd);upd();
+$('#startBtn').onclick=()=>{S.name=nameIn.value.trim();save();renderMenu();show('menu')};
+nameIn.addEventListener('keydown',e=>{if(e.key==='Enter'&&!$('#startBtn').disabled)$('#startBtn').click()});
+
+function renderMenu(){
+ $('#menuHello').textContent=`Hallo ${S.name}! Für jede richtig gelöste Quest verdienst du Geld – Fehler kosten Geld. Am Ende gründest du damit deine eigene Firma.`;
+ let h='';
+ SCENES.forEach((sc,i)=>{
+  const n=sc.tasks.filter(t=>S.solved[t.id]).length,done=n===sc.tasks.length,un=unlocked(i);
+  const cls=done?'done':un?'open':'locked';
+  h+=`<button class="ep ${cls}" data-i="${i}" ${un?'':'disabled'}><span class="estate">${done?'✓ geschafft':un?'▶ spielen':'🔒 gesperrt'}</span><div class="eico">${sc.ico}</div><div class="enr">Szene ${sc.nr}</div><div class="etitle">${sc.title}</div><div class="eform">Rechtsform: ${sc.form}</div>${S.searn[sc.id]?`<div class="eform" style="margin-top:4px">Verdient: <b>${eur(S.searn[sc.id])}</b></div>`:''}<div class="ebar"><i style="width:${n/sc.tasks.length*100}%"></i></div></button>`;
+ });
+ const fu=allDone();
+ h+=`<button class="ep ${fu?'open':'locked'}" data-i="final" ${fu?'':'disabled'}><span class="estate">${fu?'▶ ansehen':'🔒 gesperrt'}</span><div class="eico">🏆</div><div class="enr">Finale</div><div class="etitle">Gründe deine Firma!</div><div class="eform">Abspann, Kassensturz & Firmengründung</div></button>`;
+ $('#eps').innerHTML=h;
+ document.querySelectorAll('.ep').forEach(b=>b.onclick=()=>{const i=b.dataset.i;if(b.disabled)return;if(i==='final')startFinal();else startScene(+i)});
+ updWallet();
+}
+function askConfirm(msg,yes){modal(`<div class="done-ov"><h2>${msg}</h2><button class="bigbtn" id="cfYes">Ja</button><br><button class="tb" style="margin-top:12px;background:#ececf4;color:#1d1d2b" onclick="closeModal()">Abbrechen</button></div>`);$('#cfYes').onclick=()=>{closeModal();yes()}}
+$('#resetBtn').onclick=()=>askConfirm('Wirklich den gesamten Fortschritt auf diesem Gerät löschen?',()=>{S=freshState();save();nameIn.value='';upd();show('start')});
+$('#menuAkte').onclick=()=>openAkte();
+
+/* ===================== FILM ===================== */
+let cs=null;
+function playCut(ep,title,sub,shots,done,mood){
+ cs={shots,i:-1,done,bg:null,timer:null,typer:null,typing:false,full:'',mood:mood||'calm'};
+ $('#tcEp').textContent=ep;$('#tcTitle').textContent=title;$('#tcSub').textContent=sub;
+ $('#titlecard').style.display='flex';$('#cutCap').classList.remove('on');$('#cutTxt').textContent='';$('#cutWho').textContent='';$('#cutAva').style.display='none';
+ $('#cutBg').innerHTML=ROOMS[shots[0].bg]();cs.bg=shots[0].bg;
+ $('#cutDots').innerHTML=shots.map(()=>'<i></i>').join('');
+ updSoundBtns();show('cut');
+}
+$('#tcPlay').onclick=e=>{e.stopPropagation();auWake();musicStart(cs.mood);$('#titlecard').style.display='none';nextShot()};
+function clearCut(){if(!cs)return;clearTimeout(cs.timer);clearInterval(cs.typer)}
+function nextShot(){clearCut();cs.i++;if(cs.i>=cs.shots.length){endCut();return}showShot(cs.shots[cs.i])}
+function showShot(sh){
+ const bg=sh.bg||cs.bg,el=$('#cutBg');
+ if(bg!==cs.bg){cs.bg=bg;el.innerHTML=ROOMS[bg]()}
+ el.classList.remove('kb');void el.offsetWidth;
+ el.style.transformOrigin=['30% 40%','70% 55%','50% 30%','40% 70%','65% 35%'][cs.i%5];el.classList.add('kb');
+ const cap=$('#cutCap');
+ if(sh.cap){cap.textContent=sh.cap;cap.classList.remove('on');void cap.offsetWidth;cap.classList.add('on')}else cap.classList.remove('on');
+ const fx=$('#cutFx');fx.classList.remove('pop');if(sh.fx){fx.textContent=sh.fx;void fx.offsetWidth;fx.classList.add('pop');sfxFx(sh.fx)}
+ const sub=$('#cutSub');sub.classList.remove('fly');void sub.offsetWidth;sub.classList.add('fly');sfxWhoosh();
+ const ava=$('#cutAva'),who=$('#cutWho'),txt=$('#cutTxt');
+ if(sh.sp==='E'){ava.style.display='none';who.textContent='Erzähler';who.style.color='#bbb';txt.classList.add('narr')}
+ else{const c=CH[sh.sp]||{n:sh.sp,c:'#666',i:'?'};ava.style.display='grid';ava.style.background=c.c;ava.textContent=c.i;who.textContent=c.n;who.style.color=c.c==='#444'?'#bbb':c.c;txt.classList.remove('narr')}
+ [...$('#cutDots').children].forEach((d,j)=>{d.className=j<cs.i?'past':j===cs.i?'on':''});
+ cs.full=sh.tx;txt.textContent='';cs.typing=true;let k=0;
+ cs.typer=setInterval(()=>{k++;txt.textContent=cs.full.slice(0,k);const c=cs.full[k-1];if(c&&c!==' '&&(k%2===0||Math.random()<.2))sfxKey();if(k>=cs.full.length)finishTyping()},36);
+}
+function finishTyping(){clearInterval(cs.typer);$('#cutTxt').textContent=cs.full;cs.typing=false;clearTimeout(cs.timer);cs.timer=setTimeout(nextShot,1700+cs.full.length*30)}
+$('#film').addEventListener('click',()=>{if(!cs||$('#titlecard').style.display!=='none')return;if(cs.typing)finishTyping();else nextShot()});
+$('#cutSkip').onclick=e=>{e.stopPropagation();endCut()};
+$('#cutSound').onclick=e=>{e.stopPropagation();auWake();setSound(!S.sound)};
+function endCut(){if(!cs)return;clearCut();const d=cs.done;cs=null;d&&d()}
+
+/* ===================== SZENE / RAUM ===================== */
+let cur=0,openTask=null,curObj=null;
+function startScene(i){
+ const sc=SCENES[i];
+ if(!S.seen[sc.id])playCut('Szene '+sc.nr+' · '+sc.form,sc.title,'Eine Episode von ReJeans',sc.intro,()=>{S.seen[sc.id]=1;save();openRoom(i)});
+ else openRoom(i);
+}
+function openRoom(i){cur=i;openTask=null;renderRoom();updSoundBtns();show('room')}
+function renderRoom(){
+ const sc=SCENES[cur];
+ $('#rTag').textContent='Szene '+sc.nr+' · '+sc.form;$('#rTitle').textContent=sc.title;$('#mq').textContent=sc.main;
+ const st=$('#stage');
+ st.innerHTML=ROOMS[sc.room]()+sc.objects.map(o=>`<button class="obj ${S.read[sc.id+':'+o.id]?'read':''}" style="left:${o.x}%;top:${o.y}%" data-o="${o.id}"><span class="ico">${o.ico}<span class="chk">✓</span></span><span class="lbl">${o.label}</span></button>`).join('');
+ st.querySelectorAll('.obj').forEach(b=>b.onclick=()=>openObj(b.dataset.o));
+ const unread=sc.objects.filter(o=>!S.read[sc.id+':'+o.id]).length;
+ $('#roomHint').innerHTML=(unread?`🔎 Tippe auf die <b>leuchtenden Gegenstände</b> im Raum. Noch ${unread} von ${sc.objects.length} nicht untersucht.`:'✅ Du hast alle Gegenstände untersucht. Du kannst sie jederzeit erneut öffnen.')+
+  `<br>💰 Richtig gelöste Quest: <b>+${fmt(REWARD)} €</b> · Fehlversuch: <b>−${fmt(ERR)} €</b> · Tipp: <b>−${fmt(HINT)} €</b> · Szene ohne Fehler: <b>+${fmt(BONUS)} € Bonus</b>`;
+ renderQuests();
+}
+function objLabel(id){const o=SCENES[cur].objects.find(x=>x.id===id);return o?o.label:id}
+function openObj(id){
+ const sc=SCENES[cur],o=sc.objects.find(x=>x.id===id);
+ curObj={id,t:Date.now()};
+ modal(`<div class="mtop"><span class="mico">${o.ico}</span><h2>${o.label}</h2><button class="mclose" onclick="closeModal()">Schließen ✕</button></div>${o.html}`);
+ if(!S.read[sc.id+':'+id]){S.read[sc.id+':'+id]=1;save();renderRoom()}
+}
+function modal(h){$('#mcard').innerHTML=h;$('#modal').classList.add('on');$('#mcard').scrollTop=0}
+function closeModal(){
+ $('#modal').classList.remove('on');
+ if(curObj){
+  let changed=false;
+  SCENES[cur].tasks.forEach(t=>{const cl=S.cool[t.id];if(cl&&!cl.reread&&cl.need===curObj.id){cl.reread=true;changed=true}});
+  curObj=null;
+  if(changed){save();renderQuests()}
+ }
+}
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+$('#toMenu').onclick=()=>{renderMenu();show('menu')};
+$('#replay').onclick=()=>{const sc=SCENES[cur];playCut('Szene '+sc.nr+' · '+sc.form,sc.title,'Eine Episode von ReJeans',sc.intro,()=>openRoom(cur))};
+$('#roomAkte').onclick=()=>openAkte();
+$('#roomSound').onclick=()=>{auWake();setSound(!S.sound);if(S.sound)musicStart('calm')};
+
+function isLocked(t){const sc=SCENES[cur];return (t.needs||[]).filter(n=>!S.read[sc.id+':'+n])}
+function renderQuests(){
+ const sc=SCENES[cur],n=sc.tasks.filter(t=>S.solved[t.id]).length;
+ $('#qcount').textContent=n+' / '+sc.tasks.length+' erfüllt';$('#qbar').style.width=(n/sc.tasks.length*100)+'%';
+ if(openTask===null){const f=sc.tasks.find(t=>!S.solved[t.id]);openTask=f?f.id:null}
+ const box=$('#quests');
+ box.innerHTML=sc.tasks.map((t,i)=>{
+  const lk=isLocked(t),done=S.solved[t.id],cl=S.cool[t.id];
+  const cls=done?'done':lk.length?'locked':'';
+  return `<div class="qcard ${cls}" data-t="${t.id}"><div class="qhead"><span class="qnum">Quest ${sc.nr}.${i+1}</span><span class="op">${t.op}</span><span class="qt">${t.title}</span><span class="qst">${done?'✅':cl?'📖':lk.length?'🔒':'▾'}</span></div>${openTask===t.id?'<div class="qbody"></div>':''}</div>`;
+ }).join('');
+ box.querySelectorAll('.qhead').forEach(h=>h.onclick=()=>{const id=h.parentNode.dataset.t;openTask=openTask===id?'':id;renderQuests()});
+ const t=sc.tasks.find(x=>x.id===openTask);
+ if(t){const b=box.querySelector(`.qcard[data-t="${t.id}"] .qbody`);fillBody(t,b)}
+}
+function qtext(t){return `<p class="qtext">${t.q.replace(/^(\S+)/,'<b>$1</b>')}</p>`}
+function fillBody(t,b){
+ const sc=SCENES[cur],lk=isLocked(t);
+ if(S.solved[t.id]){b.innerHTML=qtext(t)+solvedView(t);return}
+ if(lk.length){b.innerHTML=`<div class="lockmsg">🔒 Untersuche zuerst im Raum: <b>${lk.map(n=>objLabel(n)).join(', ')}</b></div>`;return}
+ const cl=S.cool[t.id];
+ if(cl){
+  if(cl.reread){delete S.cool[t.id];save()}
+  else{
+   b.innerHTML=qtext(t)+`<div class="cool"><div class="cool-h">❌ Leider falsch – das kostet ${fmt(ERR)} €.</div><div>${cl.msg}</div>
+    <div class="cool-row">📖 Lies noch einmal nach: <b>${objLabel(cl.need)}</b><br><button class="btn" data-open="${cl.need}" style="margin-top:8px">📖 ${objLabel(cl.need)} öffnen</button></div>
+    <div style="font-size:13px;color:#7a5a00;margin-top:8px">Danach kannst du es sofort noch einmal versuchen.</div></div>`;
+   const ob=b.querySelector('[data-open]');if(ob)ob.onclick=()=>openObj(ob.dataset.open);
+   return;
+  }
+ }
+ let h=qtext(t);
+ if(t.type==='choice'||t.type==='choicetext'){
+  const ch=S.chosen[t.id];
+  const order=ch?range(t.options.length):shuf(range(t.options.length));
+  h+=`<div class="opts">${order.map(i=>`<button class="opt ${ch&&i===t.correct?'ok':''}" data-i="${i}" ${ch?'disabled':''}>${t.options[i]}</button>`).join('')}</div>`;
+  if(t.type==='choicetext')h+=`<div class="ctext" ${ch?'':'hidden'}><label>✍️ ${t.tprompt}</label><textarea rows="4" placeholder="Schreibe hier in ganzen Sätzen …">${esc(S.ans[t.id]||'')}</textarea><div style="font-size:13px;color:#777" class="cnt"></div><button class="btn sv">Abgeben</button></div>`;
+ }else if(t.type==='number'){
+  const a=S.ans[t.id]||[];
+  h+=t.parts.map((p,i)=>`<label class="num"><span>${p.label}</span><span class="inp"><input inputmode="decimal" data-i="${i}" value="${esc(a[i]||'')}" autocomplete="off"><em>${p.unit||'€'}</em></span></label>`).join('')+`<button class="btn ck">Prüfen</button>`;
+ }else if(t.type==='tf'){
+  h+=shuf(range(t.items.length)).map(i=>`<div class="tf" data-i="${i}"><div class="tfs">${t.items[i].t}</div><div class="tfb"><button data-v="1">✔ Wahr</button><button data-v="0">✘ Falsch</button></div></div>`).join('')+`<button class="btn ck">Prüfen</button>`;
+ }else if(t.type==='sort'){
+  h+=`<div class="sorthelp">👉 Tippe erst eine Karte an, dann den passenden Kasten. Falsch abgelegt? Karte antippen und neu ablegen.</div><div class="pool">${shuf(range(t.items.length)).map(i=>`<button class="chip" data-i="${i}">${t.items[i].t}</button>`).join('')}</div><div class="buckets" style="--n:${t.buckets.length}">${t.buckets.map((bk,j)=>`<div class="bucket" data-j="${j}"><div class="bh">${bk}</div><div class="bc"></div></div>`).join('')}</div><button class="btn ck">Prüfen</button>`;
+ }else if(t.type==='text'){
+  h+=`<textarea rows="5" placeholder="Schreibe hier in ganzen Sätzen …">${esc(S.ans[t.id]||'')}</textarea><div style="font-size:13px;color:#777" class="cnt"></div><button class="btn sv">Abgeben</button>`;
+ }else if(t.type==='akte'){
+  const cur2=S.akte[t.col]||{};
+  const so=sc.objects.find(o=>o.id===t.needs[0]);let rd='';if(so){const tmp=document.createElement('div');tmp.innerHTML=so.html;const r=tmp.querySelector('.rtext');if(r)rd=r.outerHTML}
+  h+=`<div class="akread"><div class="akstep">① Lies zuerst den Text genau durch:</div>${rd}<div class="akstep">② Fülle jetzt die Spalte aus – und übertrage sie in deinen Advance Organizer:</div></div>`;
+  h+=`<div style="font-weight:900;margin-bottom:4px">📁 Spalte: ${AKTE_COLS[t.col].replace('­','')}</div>`+AKTE_ROWS.map(r=>`<div class="arow"><span>${r.l}</span><select data-k="${r.k}"><option value="">– bitte wählen –</option>${shuf(range(r.o.length)).map(i=>`<option value="${i}" ${cur2[r.k]===i?'selected':''}>${r.o[i]}</option>`).join('')}</select></div>`).join('')+`<button class="btn ck">In die Akte eintragen</button>`;
+ }
+ h+=`<div class="fb"></div>`;
+ if(t.hints&&t.hints.length){
+  const used=S.hints[t.id]||0;
+  h+=`<div class="hints">${t.hints.slice(0,used).map(x=>`<div class="hint">💡 ${x}</div>`).join('')}</div>`;
+  if(used<t.hints.length)h+=`<button class="hintbtn">💡 Tipp kaufen (−${fmt(HINT)} €) · noch ${t.hints.length-used}</button>`;
+ }
+ b.innerHTML=h;bind(t,b);
+}
+function fb(b,ok,msg){const f=b.querySelector('.fb');f.className='fb '+(ok?'ok':'bad');f.innerHTML=msg}
+function fail(t,msg){
+ const sid=SCENES[cur].id;
+ S.err++;S.serr[sid]=(S.serr[sid]||0)+1;
+ const need=(t.needs&&t.needs.length)?t.needs[Math.floor(Math.random()*t.needs.length)]:null;
+ S.cool[t.id]={need,reread:!need,msg};
+ money(-ERR,sid);sfxBad();save();
+ toast('❌ Fehlversuch: −'+fmt(ERR)+' €',true);
+ setTimeout(()=>{openTask=t.id;renderQuests()},1200);
+}
+function solve(t){
+ if(S.solved[t.id])return;
+ const sid=SCENES[cur].id;
+ S.solved[t.id]=true;money(REWARD,sid);sfxGood();setTimeout(sfxCoin,250);save();
+ toast('✅ Quest erfüllt! +'+fmt(REWARD)+' €');
+ const sc=SCENES[cur],nx=sc.tasks.find(x=>!S.solved[x.id]);openTask=nx?nx.id:'';
+ setTimeout(()=>{renderQuests();if(sceneDone(cur))setTimeout(sceneComplete,500)},800);
+}
+function textCheck(t,v){
+ const s=v.trim(),low=s.toLowerCase();
+ const words=low.split(/\s+/).filter(w=>/[a-zäöüß]{2,}/.test(w));
+ if(s.length<t.min||words.length<7)return 'Deine Begründung ist noch zu kurz. Schreibe mindestens zwei ganze Sätze.';
+ if(/(.)\1{3,}/.test(low))return 'Das sieht nicht nach richtigen Sätzen aus. Schreibe bitte sorgfältig.';
+ if(new Set(words).size/words.length<.5)return 'Du wiederholst dich sehr oft. Formuliere deine Begründung in eigenen Worten.';
+ if(words.some(w=>w.replace(/[^a-zäöüß]/g,'').length>24))return 'Das sieht nicht nach richtigen Wörtern aus. Schreibe bitte sorgfältig.';
+ if(t.kw)for(const g of t.kw)if(!g.some(k=>low.includes(k)))return '💡 '+t.kwMsg;
+ return null;
+}
+function bind(t,b){
+ const hb=b.querySelector('.hintbtn');
+ if(hb)hb.onclick=()=>{const used=S.hints[t.id]||0;if(used>=t.hints.length)return;S.hints[t.id]=used+1;S.hintsUsed++;money(-HINT,SCENES[cur].id);toast('💡 Tipp gekauft: −'+fmt(HINT)+' €',true);renderQuests()};
+ const cnt=(ta,c,min)=>{const u=()=>{const l=ta.value.trim().length;c.textContent=l<min?`Noch mindestens ${min-l} Zeichen …`:'✓ Länge passt – jetzt noch einmal durchlesen und abgeben.'};ta.addEventListener('input',u);u()};
+ const submitText=(ta)=>{const err=textCheck(t,ta.value);if(err){fb(b,false,err);return}S.ans[t.id]=ta.value.trim();fb(b,true,'Begründung gespeichert! 📝');solve(t)};
+ if(t.type==='choice'||t.type==='choicetext'){
+  b.querySelectorAll('.opt').forEach(o=>o.onclick=()=>{
+   const i=+o.dataset.i;b.querySelectorAll('.opt').forEach(x=>x.disabled=true);
+   if(i===t.correct){o.classList.add('ok');
+    if(t.type==='choice'){fb(b,true,'Richtig! 🎉');solve(t)}
+    else{S.chosen[t.id]=1;save();sfxGood();fb(b,true,'Richtig entschieden! Jetzt noch begründen. ✍️');const c=b.querySelector('.ctext');c.hidden=false;c.querySelector('textarea').focus()}}
+   else{o.classList.add('bad');const m=(t.wrong&&t.wrong[i])||'Schau dir das Material im Raum noch einmal genau an.';fb(b,false,m);fail(t,m)}
+  });
+  if(t.type==='choicetext'){const ta=b.querySelector('textarea');cnt(ta,b.querySelector('.cnt'),t.min);ta.addEventListener('input',()=>{S.ans[t.id]=ta.value;save()});b.querySelector('.sv').onclick=()=>submitText(ta)}
+ }
+ if(t.type==='text'){const ta=b.querySelector('textarea');cnt(ta,b.querySelector('.cnt'),t.min);ta.addEventListener('input',()=>{S.ans[t.id]=ta.value;save()});b.querySelector('.sv').onclick=()=>submitText(ta)}
+ if(t.type==='number'){
+  b.querySelector('.ck').onclick=()=>{
+   const ins=[...b.querySelectorAll('input')];
+   if(ins.some(x=>x.value.trim()==='')){fb(b,false,'Fülle erst alle Felder aus.');return}
+   let ok=0;S.ans[t.id]=ins.map(x=>x.value);save();
+   ins.forEach((x,i)=>{const r=Math.abs(parseNum(x.value)-t.parts[i].a)<.01;x.classList.toggle('ok',r);x.classList.toggle('bad',!r);if(r)ok++});
+   if(ok===ins.length){fb(b,true,'Alles richtig gerechnet! 🧮'+(t.ex?`<div class="ex">${t.ex}</div>`:''));solve(t)}
+   else{const m=`${ok} von ${ins.length} Ergebnissen sind richtig. Rechne noch einmal sorgfältig nach.`;fb(b,false,m);b.querySelector('.ck').disabled=true;fail(t,m)}
+  }}
+ if(t.type==='tf'){
+  const val={};
+  b.querySelectorAll('.tf').forEach(r=>r.querySelectorAll('.tfb button').forEach(btn=>btn.onclick=()=>{r.querySelectorAll('.tfb button').forEach(x=>x.classList.remove('on'));btn.classList.add('on');val[r.dataset.i]=btn.dataset.v==='1'}));
+  b.querySelector('.ck').onclick=()=>{
+   if(Object.keys(val).length<t.items.length){fb(b,false,'Entscheide dich erst bei allen Aussagen.');return}
+   let ok=0;t.items.forEach((it,i)=>{if(val[i]===it.a)ok++});
+   if(ok===t.items.length){b.querySelectorAll('.tf').forEach(r=>r.classList.add('ok'));fb(b,true,'Alles richtig erkannt! 🕵️');solve(t)}
+   else{const m=`${ok} von ${t.items.length} Aussagen hast du richtig eingeschätzt. Welche falsch sind, verraten wir nicht – lies genau nach!`;fb(b,false,m);b.querySelector('.ck').disabled=true;fail(t,m)}
+  }}
+ if(t.type==='sort'){
+  let sel=null;const pool=b.querySelector('.pool');
+  const clearSel=()=>{b.querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));b.querySelectorAll('.bucket,.pool').forEach(x=>x.classList.remove('target'));sel=null};
+  b.querySelectorAll('.chip').forEach(c=>c.onclick=e=>{e.stopPropagation();if(sel===c){clearSel();return}clearSel();sel=c;c.classList.add('sel');b.querySelectorAll('.bucket').forEach(x=>x.classList.add('target'));if(c.parentNode!==pool)pool.classList.add('target')});
+  b.querySelectorAll('.bucket').forEach(bk=>bk.onclick=()=>{if(!sel)return;bk.querySelector('.bc').appendChild(sel);clearSel()});
+  pool.onclick=()=>{if(!sel)return;pool.appendChild(sel);clearSel()};
+  b.querySelector('.ck').onclick=()=>{
+   if(pool.querySelectorAll('.chip').length){fb(b,false,'Ordne zuerst alle Karten einem Kasten zu.');return}
+   let ok=0;b.querySelectorAll('.bucket').forEach(bk=>bk.querySelectorAll('.chip').forEach(c=>{if(t.items[+c.dataset.i].b===+bk.dataset.j)ok++}));
+   if(ok===t.items.length){b.querySelectorAll('.chip').forEach(c=>c.classList.add('ok'));fb(b,true,'Perfekt sortiert! 🗂️');solve(t)}
+   else{const m=`${ok} von ${t.items.length} Karten liegen richtig. Welche falsch liegen, verraten wir nicht – lies genau nach!`;fb(b,false,m);b.querySelector('.ck').disabled=true;fail(t,m)}
+  }}
+ if(t.type==='akte'){
+  b.querySelector('.ck').onclick=()=>{
+   const sels=[...b.querySelectorAll('select')];const sol=AKTE_SOL[t.col];S.akte[t.col]=S.akte[t.col]||{};
+   if(sels.some(s=>s.value==='')){fb(b,false,'Fülle zuerst alle Zeilen aus.');return}
+   let ok=0;sels.forEach(s=>{const v=+s.value;S.akte[t.col][s.dataset.k]=v;if(v===sol[s.dataset.k])ok++});save();
+   if(ok===sels.length){sels.forEach(s=>s.classList.add('ok'));fb(b,true,'Die Spalte ist korrekt und steht jetzt in deiner Akte! 📁 Übertrage sie auch in deinen Advance Organizer.');solve(t)}
+   else{const m=`${ok} von ${sels.length} Zeilen sind richtig. Welche falsch sind, verraten wir nicht – lies genau nach!`;fb(b,false,m);b.querySelector('.ck').disabled=true;fail(t,m)}
+  }}
+}
+function solvedView(t){
+ let h='<div class="solved">✅ Quest erfüllt</div>';
+ if(t.type==='choice'||t.type==='choicetext')h+=`<div class="opt ok">${t.options[t.correct]}</div>`;
+ if(t.type==='choicetext'||t.type==='text')h+=`<div class="myans"><b>Deine Begründung:</b><br>${esc(S.ans[t.id]||'')}</div>`;
+ if(t.type==='number')h+=t.parts.map(p=>`<div class="sline">${p.label} <b>${fmt(p.a)} ${p.unit||'€'}</b></div>`).join('');
+ if(t.type==='tf')h+=t.items.map(it=>`<div class="tf ok"><div class="tfs">${it.t}</div><b>${it.a?'✔ Wahr':'✘ Falsch'}</b>${it.fix?`<div class="fix">→ ${it.fix}</div>`:''}</div>`).join('');
+ if(t.type==='sort')h+=`<div class="buckets" style="--n:${t.buckets.length}">${t.buckets.map((bk,j)=>`<div class="bucket"><div class="bh">${bk}</div><div class="bc">${t.items.filter(it=>it.b===j).map(it=>`<span class="chip ok">${it.t}</span>`).join('')}</div></div>`).join('')}</div>`;
+ if(t.type==='akte')h+=AKTE_ROWS.map(r=>`<div class="sline">${r.l}: <b>${r.o[AKTE_SOL[t.col][r.k]]}</b></div>`).join('');
+ if(t.ex)h+=`<div class="ex">${t.ex}</div>`;
+ return h;
+}
+function sceneComplete(){
+ const i=cur,sc=SCENES[i],nx=SCENES[i+1];
+ const perfect=!(S.serr[sc.id]>0);
+ if(perfect&&!S['bonus_'+sc.id]){S['bonus_'+sc.id]=1;money(BONUS,sc.id);setTimeout(sfxCoin,300)}
+ const btn=nx?`<button class="bigbtn" id="goNext">Weiter zu Szene ${nx.nr}: ${nx.title} ▸</button>`:`<button class="bigbtn" id="goNext">Zum Finale 🏆</button>`;
+ modal(`<div class="done-ov"><div class="big">🎬</div><h2>Szene ${sc.nr} geschafft!</h2><p style="font-size:17px">Du hast alle Quests zur Rechtsform <b>${sc.form}</b> erfüllt.</p>
+  <div class="earn"><div>In dieser Szene verdient:</div><div class="earn-big ${S.searn[sc.id]<0?'neg':''}">${eur(S.searn[sc.id]||0)}</div>
+  <div>${perfect?`🌟 <b>Ohne einen einzigen Fehler!</b> Darin enthalten: ${fmt(BONUS)} € Bonus.`:`Fehlversuche in dieser Szene: <b>${S.serr[sc.id]}</b>. Ohne Fehler hättest du ${fmt(BONUS)} € Bonus bekommen.`}</div>
+  <div style="margin-top:6px">Dein Kontostand: <b>${eur(S.money)}</b></div></div>
+  <p style="font-size:15px;color:#555">✏️ Denk daran: Trag die Spalte <b>${sc.form}</b> auch in deinen Advance Organizer ein!</p>
+  ${btn}<br><button class="tb" style="margin-top:14px;background:#ececf4;color:#1d1d2b" onclick="closeModal()">Im Raum bleiben</button></div>`);
+ $('#goNext').onclick=()=>{closeModal();if(nx)startScene(i+1);else startFinal()};
+}
+
+/* ===================== AKTE ===================== */
+function akteTable(){
+ const cols=Object.keys(AKTE_COLS);
+ const solvedCol=c=>{for(const sc of SCENES)for(const t of sc.tasks)if(t.type==='akte'&&t.col===c)return !!S.solved[t.id];return false};
+ let h='<div class="tw"><table class="t akte"><tr><th></th>'+cols.map(c=>`<th>${AKTE_COLS[c]}</th>`).join('')+'</tr>';
+ AKTE_ROWS.forEach(r=>{h+=`<tr><td>${r.l}</td>`+cols.map(c=>solvedCol(c)?`<td>${r.o[AKTE_SOL[c][r.k]]}</td>`:'<td class="empty">?</td>').join('')+'</tr>'});
+ return h+'</table></div>';
+}
+function openAkte(){modal(`<div class="mtop"><span class="mico">📁</span><h2>Leas Gründungsakte</h2><button class="mclose" onclick="closeModal()">Schließen ✕</button></div><p style="margin-top:0;color:#555">Jede Spalte füllt sich, sobald du die passende Akten-Quest erfüllt hast. <b>Übertrage alles in deinen Advance Organizer – im Escape Room brauchst du ihn!</b></p>${akteTable()}`)}
+
+/* ===================== FINALE & FIRMENGRÜNDUNG ===================== */
+const FIRMS=[
+ {k:'e.K.',n:'eingetragene Kauffrau / eingetragener Kaufmann',form:'Einzelunternehmen',min:0,col:'EU'},
+ {k:'GbR',n:'Gesellschaft bürgerlichen Rechts',form:'GbR',min:0,col:'GbR',partner:'Name deiner Mitgründerin / deines Mitgründers',plabel:'Mitgründer/in'},
+ {k:'OHG',n:'Offene Handelsgesellschaft',form:'OHG',min:0,col:'OHG',partner:'Name deiner Mitgründerin / deines Mitgründers',plabel:'Mitgründer/in'},
+ {k:'KG',n:'Kommanditgesellschaft',form:'KG',min:0,col:'KG',partner:'Name deiner Geldgeberin / deines Geldgebers (Kommanditist/in)',plabel:'Kommanditist/in'},
+ {k:'UG (haftungsbeschränkt)',n:'Unternehmergesellschaft (haftungsbeschränkt)',form:'UG',min:1,col:'UG',notar:1},
+ {k:'GmbH',n:'Gesellschaft mit beschränkter Haftung',form:'GmbH',min:25000,col:'GmbH',notar:1},
+ {k:'AG',n:'Aktiengesellschaft',form:'AG',min:50000,col:'AG',notar:1}
+];
+function startFinal(){
+ if(!S.seen.final)playCut('Finale','Die verschwundene Akte','Eine Episode von ReJeans',FINAL_INTRO,()=>{S.seen.final=1;save();openFinal()},'tense');
+ else openFinal();
+}
+function openFinal(){
+ $('#certName').textContent=S.name;
+ const mins=Math.max(1,Math.round((Date.now()-S.start)/60000));
+ $('#finStats').innerHTML=`<div class="st"><div class="stv ${S.money<0?'neg':''}">${eur(S.money)}</div><div class="stl">Dein Startkapital</div></div><div class="st"><div class="stv">${S.err}</div><div class="stl">Fehlversuche</div></div><div class="st"><div class="stv">${S.hintsUsed}</div><div class="stl">gekaufte Tipps</div></div><div class="st"><div class="stv">${mins} min</div><div class="stl">Bearbeitungszeit</div></div>`;
+ $('#finAkte').innerHTML=akteTable();
+ let h='';SCENES.forEach(sc=>sc.tasks.forEach((t,i)=>{if(t.type==='text'||t.type==='choicetext')h+=`<div class="ansitem"><b>Szene ${sc.nr} · Quest ${sc.nr}.${i+1} · ${t.op}: ${t.title}</b>${esc(S.ans[t.id]||'–')}</div>`}));
+ $('#finAns').innerHTML=h;
+ renderFounder();show('final');
+}
+let pick=null;
+function renderFounder(){
+ const el=$('#founder');
+ if(S.company){el.innerHTML=companyDoc();const r=el.querySelector('#refound');if(r)r.onclick=()=>askConfirm('Möchtest du deine Firma wirklich auflösen und neu gründen?',()=>{S.company=null;save();pick=null;renderFounder()});return}
+ const m=S.money;
+ let h=`<h2>💼 Gründe deine eigene Firma!</h2><p class="fp">Mit dem Geld, das du in den Szenen verdient hast, kannst du jetzt deine eigene Firma gründen. Du hast <b class="${m<0?'negt':''}">${eur(m)}</b> Startkapital. Wähle eine Rechtsform, deren <b>Mindestkapital</b> du bezahlen kannst.</p>`;
+ if(m<=0){
+  h+=`<div class="broke">😔 <b>Leider reicht dein Geld nicht.</b> ${m<0?'Du hast sogar Schulden!':'Dein Konto ist leer.'} Ohne Startkapital gibt dir keine Bank einen Kredit, und du kannst keine Firma gründen.<br><br>Tipp für das nächste Mal: Lies die Materialien genau, bevor du antwortest – jeder Fehlversuch kostet Geld.</div>`;
+  el.innerHTML=h;return;
+ }
+ h+=`<div class="firms">${FIRMS.map((f,i)=>{const can=m>=f.min;return `<button class="firm ${can?'':'no'} ${pick===i?'sel':''}" data-i="${i}" ${can?'':'disabled'}><div class="fk">${f.k}</div><div class="fn">${f.n}</div><div class="fm">Mindestkapital: ${f.min===0?'keins':f.min===1?'ab 1 €':fmt(f.min)+' €'}</div><div class="fs">${can?'✅ leistbar':'🔒 Dir fehlen '+fmt(f.min-m)+' €'}</div></button>`}).join('')}</div>`;
+ if(pick!==null){
+  const f=FIRMS[pick];
+  h+=`<div class="ffrm"><h3>Deine ${f.form}: Wie soll sie heißen?</h3>
+   <label>Firmenname <span class="small" style="color:#777">(ohne Zusatz – der kommt automatisch)</span><input id="fName" maxlength="30" placeholder="z. B. Bike Lab, Sneaker Doc, Pixel Food …"></label>
+   ${f.partner?`<label>${f.partner}<input id="fPart" maxlength="20" placeholder="Nickname"></label>`:''}
+   <div class="fprev" id="fPrev">„… ${f.k}“</div>
+   <div class="fb" id="fErr"></div>
+   <button class="bigbtn" id="fGo">🖋️ Firma eintragen lassen</button></div>`;
+ }
+ el.innerHTML=h;
+ el.querySelectorAll('.firm').forEach(b=>b.onclick=()=>{if(b.disabled)return;pick=+b.dataset.i;renderFounder();const fn=$('#fName');if(fn){fn.focus();fn.scrollIntoView({behavior:'smooth',block:'center'})}});
+ if(pick!==null){
+  const f=FIRMS[pick],fn=$('#fName'),fp=$('#fPart');
+  const up=()=>{$('#fPrev').textContent='„'+(fn.value.trim()||'…')+' '+f.k+'“'};fn.addEventListener('input',up);
+  $('#fGo').onclick=()=>{
+   const name=fn.value.trim().replace(/\s+/g,' ');
+   if(name.length<2){$('#fErr').className='fb bad';$('#fErr').textContent='Gib deiner Firma einen Namen (mindestens 2 Zeichen).';return}
+   if(f.partner&&(!fp||fp.value.trim().length<2)){$('#fErr').className='fb bad';$('#fErr').textContent=f.form==='KG'?'Eine KG braucht mindestens eine Kommanditistin oder einen Kommanditisten. Trage einen Namen ein.':'Für eine '+f.form+' brauchst du mindestens eine zweite Person. Trage einen Namen ein.';return}
+   S.company={i:pick,name,partner:fp?fp.value.trim():'',capital:S.money,date:Date.now()};save();sfxFanfare();renderFounder();
+   $('#founder').scrollIntoView({behavior:'smooth',block:'start'});
+  };
+ }
+}
+function companyDoc(){
+ const c=S.company,f=FIRMS[c.i],hz=AKTE_ROWS.find(r=>r.k==='h').o[AKTE_SOL[f.col].h];
+ const reg=f.form==='GbR'?'Gewerbeamt Chemnitz · Bestätigung der Gewerbeanmeldung':'Amtsgericht Chemnitz · Handelsregister';
+ return `<h2>🎉 Herzlichen Glückwunsch – deine Firma ist gegründet!</h2>
+ <div class="doc"><div class="doc-h">${reg}</div>
+  <div class="doc-firm">${esc(c.name)} ${f.k}</div>
+  <div class="doc-form">Rechtsform: ${f.form} – ${f.n}</div>
+  <table class="doc-t">
+   <tr><td>Gründer/in</td><td><b>${esc(S.name)}</b>${c.partner?` · ${f.plabel}: <b>${esc(c.partner)}</b>`:''}</td></tr>
+   <tr><td>Startkapital</td><td><b>${eur(c.capital)}</b>${f.min>1?` (Mindestkapital ${fmt(f.min)} € ✓)`:''}</td></tr>
+   <tr><td>Haftung</td><td>${hz}</td></tr>
+   ${f.notar?'<tr><td>Notar</td><td>Gesellschaftsvertrag beurkundet ✓</td></tr>':''}
+   <tr><td>Datum</td><td>${new Date(c.date).toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'})}</td></tr>
+  </table>
+  <div class="doc-stamp">${f.form==='GbR'?'ANGEMELDET':'EINGETRAGEN'} ✓</div>
+ </div>
+ <p class="fp" style="margin-top:14px">Zeig diese Urkunde deiner Lehrkraft! <button class="tb" id="refound" style="background:#ececf4;color:#1d1d2b;margin-left:8px">Andere Rechtsform wählen</button></p>`;
+}
+$('#finMenu').onclick=()=>{renderMenu();show('menu')};
+$('#finReplay').onclick=()=>playCut('Finale','Die verschwundene Akte','Eine Episode von ReJeans',FINAL_INTRO,openFinal,'tense');
+
+/* ===================== INIT ===================== */
+updSoundBtns();
+if(S.name){renderMenu();show('menu')}else show('start');
+
+</script>
+</body>
+</html>
